@@ -1,0 +1,74 @@
+/my-health-app
+│
+├── /frontend                 // React.js 프론트엔드 애플리케이션
+│   ├── /public               // 정적 파일 (이미지, 아이콘 등)
+│   ├── /src
+│   │   ├── /components       // 재사용 가능한 React 컴포넌트들 (예: 버튼, 폼 등)
+│   │   ├── /pages            // 각 페이지 컴포넌트 (홈, 대시보드, 로그인 등)
+│   │   ├── /hooks            // 커스텀 React 훅들 (예: useAuth, useFetch 등)
+│   │   ├── /services         // API 호출 등 백엔드와의 통신 로직
+│   │   ├── /assets           // 스타일 시트(CSS), 폰트, 이미지 등
+│   │   ├── /utils            // 유틸리티 함수들 (날짜 포맷팅, 데이터 변환 등)
+│   │   ├── /context          // React Context API 관련 파일들 (상태 관리)
+│   │   ├── App.js            // 메인 앱 컴포넌트
+│   │   └── index.js          // React 앱 진입점
+│   ├── /tests                // Jest를 사용한 프론트엔드 테스트 파일들
+│   ├── package.json          // 프론트엔드 종속성 정보
+│   ├── .eslintrc.js          // ESLint 설정 파일
+│   └── tsconfig.json         // TypeScript 설정 파일 (React와 TypeScript 사용 시)
+│
+├── /backend                  // Nest.js 백엔드 애플리케이션
+│   ├── /src
+│   │   ├── /controllers      // Nest.js 컨트롤러 (라우트에 따른 비즈니스 로직 처리)
+│   │   ├── /services         // Nest.js 서비스 (데이터 처리 및 외부 API 연동)
+│   │   ├── /models           // TypeORM을 사용한 DB 모델 정의
+│   │   ├── /middlewares      // Nest.js 미들웨어 (인증, 로깅 등)
+│   │   ├── /config           // 환경설정 파일 (데이터베이스, API 키 등)
+│   │   ├── /utils            // 유틸리티 함수들
+│   │   ├── /dto              // Data Transfer Objects 정의
+│   │   ├── /guards           // Nest.js 가드 (인증, 권한 체크)
+│   │   ├── /pipes            // Nest.js 파이프 (데이터 변환 및 유효성 검사)
+│   │   ├── /interceptors     // Nest.js 인터셉터 (응답 변환, 캐싱 등)
+│   │   ├── /decorators       // 커스텀 데코레이터
+│   │   └── main.ts           // Nest.js 애플리케이션 엔트리 포인트
+│   ├── /test                 // Jest를 사용한 백엔드 테스트 파일들
+│   ├── package.json          // 백엔드 종속성 정보
+│   ├── nest-cli.json         // Nest CLI 설정 파일
+│   └── tsconfig.json         // TypeScript 설정 파일
+│
+├── /infrastructure           // 인프라 관련 파일들
+│   ├── /terraform            // Terraform 코드 (AWS 리소스 설정)
+│   │   ├── main.tf           // 메인 Terraform 설정 파일
+│   │   ├── variables.tf      // Terraform 변수 정의
+│   │   └── outputs.tf        // Terraform 출력 정의
+│   ├── /docker               // Docker 설정 파일들
+│   │   ├── Dockerfile.frontend  // 프론트엔드 Docker 이미지 설정
+│   │   └── Dockerfile.backend   // 백엔드 Docker 이미지 설정
+│   ├── /kubernetes           // Kubernetes 배포 파일들
+│   │   ├── frontend-deployment.yaml
+│   │   ├── backend-deployment.yaml
+│   │   └── database-statefulset.yaml
+│   ├── /scripts              // 배포 자동화 스크립트
+│   ├── /helm                 // Helm 차트 (Kubernetes 배포 관리)
+│   │   ├── Chart.yaml
+│   │   ├── values.yaml
+│   │   └── /templates
+│   └── /secrets              // 비밀 정보 관리 (예: API 키, DB 비밀번호)
+│
+├── /database                 // 데이터베이스 관련 파일들
+│   ├── /migrations           // TypeORM 마이그레이션 파일들
+│   ├── /seeds                // 초기 데이터 삽입 스크립트
+│   ├── schema.sql            // MySQL DB 스키마 정의
+│   └── /backups              // 데이터베이스 백업 스크립트
+│
+├── /docs                     // 프로젝트 문서화
+│   ├── /api                  // API 문서화 (Swagger/OpenAPI)
+│   │   └── swagger.json      // Swagger API 명세
+│   └── /architecture         // 시스템 아키텍처 문서
+│       └── system-design.md  // 시스템 설계 문서
+│
+├── README.md                 // 프로젝트 설명 및 가이드
+├── .gitignore                // Git에 포함되지 않을 파일들
+├── .env                      // 환경 변수 파일
+├── docker-compose.yml        // Docker Compose 설정 파일
+└── package.json              // 프로젝트 전체 스크립트 및 종속성
