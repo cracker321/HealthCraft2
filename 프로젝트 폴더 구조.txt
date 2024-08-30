@@ -2,189 +2,191 @@
 
 
 
+
 /health-craft
 │
-├── /frontend                 // React.js 프론트엔드 애플리케이션
-│   ├── /public               // 정적 파일 (이미지, 아이콘 등)
-│   │   ├── index.html        // 메인 HTML 파일
-│   │   ├── favicon.ico       // 웹사이트 아이콘
-│   │   └── /assets           // 기타 정적 자산
-│   ├── /src
-│   │   ├── /components       // 재사용 가능한 React 컴포넌트들
-│   │   │   ├── /common       // 공통 컴포넌트 (Button, Input 등)
+├── /frontend                 // Next.js 프론트엔드 애플리케이션의 루트 디렉토리
+│   ├── /public               // Next.js에서 정적 파일을 제공하는 기본 폴더
+│   │   ├── favicon.ico       // 웹사이트 아이콘, 브라우저 탭에 표시
+│   │   └── /assets           // 기타 정적 자산 (이미지, 폰트 등)
+│   │       ├── images        // 이미지 파일을 보관하는 디렉토리
+│   │       └── fonts         // 웹사이트에서 사용하는 폰트 파일을 보관하는 디렉토리
+│   ├── /src                  // 소스 파일들을 보관하는 디렉토리
+│   │   ├── /components       // 재사용 가능한 React 컴포넌트를 보관하는 디렉토리
+│   │   │   ├── /common       // 공통으로 사용되는 컴포넌트 (Button, Input 등)
 │   │   │   ├── /layout       // 레이아웃 관련 컴포넌트 (Header, Footer 등)
-│   │   │   └── /features     // 기능별 컴포넌트
-│   │   ├── /pages            // 각 페이지 컴포넌트
-│   │   │   ├── Home.tsx
-│   │   │   ├── Dashboard.tsx
-│   │   │   └── Profile.tsx
-│   │   ├── /hooks            // 커스텀 React 훅들
-│   │   │   ├── useAuth.ts
-│   │   │   └── useFetch.ts
-│   │   ├── /services         // API 호출 등 백엔드와의 통신 로직
-│   │   │   ├── api.ts        // Axios 인스턴스 및 기본 설정
-│   │   │   ├── userService.ts
-│   │   │   └── nutritionService.ts
-│   │   ├── /assets           // 스타일 시트(CSS), 폰트, 이미지 등
-│   │   │   ├── /styles
-│   │   │   ├── /images
-│   │   │   └── /fonts
-│   │   ├── /utils            // 유틸리티 함수들
-│   │   │   ├── formatters.ts
-│   │   │   └── validators.ts
-│   │   ├── /context          // React Context API 관련 파일들
-│   │   │   ├── AuthContext.tsx
-│   │   │   └── ThemeContext.tsx
-│   │   ├── /redux            // Redux 상태 관리 관련 파일들
-│   │   │   ├── /actions
-│   │   │   ├── /reducers
-│   │   │   ├── /selectors
-│   │   │   ├── /middlewares
-│   │   │   └── store.ts
+│   │   │   └── /features     // 특정 기능에 맞춘 컴포넌트들
+│   │   ├── /hooks            // 커스텀 React 훅들을 보관하는 디렉토리
+│   │   │   ├── useAuth.ts    // 인증 관련 훅
+│   │   │   └── useFetch.ts   // API 데이터를 가져오기 위한 훅
+│   │   ├── /services         // API 호출 등 백엔드와의 통신 로직을 관리하는 파일들
+│   │   │   ├── api.ts        // Axios 인스턴스 및 기본 설정 관리
+│   │   │   ├── userService.ts // 사용자 관련 API 호출 관리
+│   │   │   └── nutritionService.ts // 영양 관련 API 호출 관리
+│   │   ├── /context          // React Context API 관련 파일들, 전역 상태 관리
+│   │   │   ├── AuthContext.tsx // 사용자 인증 상태를 관리하는 Context
+│   │   │   └── ThemeContext.tsx // 테마 설정(예: 다크 모드)을 관리하는 Context
+│   │   ├── /redux            // Redux를 통한 상태 관리를 위한 파일들
+│   │   │   ├── /actions      // 상태 관리 액션 정의 파일들
+│   │   │   ├── /reducers     // 상태 관리 리듀서 정의 파일들
+│   │   │   ├── /selectors    // 상태에서 데이터를 선택하는 함수들
+│   │   │   ├── /middlewares  // Redux 미들웨어 관리 파일들
+│   │   │   └── store.ts      // Redux 스토어 설정 파일
 │   │   ├── /styles           // CSS-in-JS 또는 스타일 모듈 파일들
-│   │   │   ├── global.css
-│   │   │   └── theme.ts
-│   │   ├── /i18n             // 다국어 지원 관련 파일들
-│   │   │   ├── /locales
-│   │   │   └── i18n.ts
-│   │   ├── /config           // 환경 설정 파일
-│   │   │   └── config.ts
-│   │   ├── App.tsx           // 메인 앱 컴포넌트
-│   │   └── index.tsx         // React 앱 진입점
-│   ├── /tests                // Jest를 사용한 프론트엔드 테스트 파일들
-│   │   ├── /unit
-│   │   ├── /integration
-│   │   └── /e2e
-│   ├── /cypress              // Cypress E2E 테스트
-│   │   ├── /integration
-│   │   ├── /fixtures
-│   │   └── /support
-│   ├── package.json          // 프론트엔드 종속성 정보
-│   ├── tsconfig.json         // TypeScript 설정 파일
-│   ├── .eslintrc.js          // ESLint 설정 파일
-│   ├── .prettierrc           // Prettier 코드 포맷 설정 파일
-│   └── webpack.config.js     // Webpack 설정 파일 (필요 시)
+│   │   │   ├── global.css    // 전역 스타일 관리 파일
+│   │   │   └── theme.ts      // 스타일 테마 설정 파일
+│   │   ├── /i18n             // 다국어 지원을 위한 파일들
+│   │   │   ├── /locales      // 다국어 지원을 위한 언어 파일들 (예: en.json, ko.json)
+│   │   │   └── i18n.ts       // i18n 설정 파일, 언어 변경 로직 관리
+│   │   ├── /config           // 환경 설정 파일을 보관하는 디렉토리
+│   │   │   └── config.ts     // 환경 변수 및 애플리케이션 설정 관리 파일
+│   │   └── /utils            // 유틸리티 함수들을 보관하는 디렉토리
+│   │       ├── formatters.ts // 데이터 포맷팅 관련 유틸리티 함수들
+│   │       └── validators.ts // 입력 값 검증 관련 유틸리티 함수들
+│   ├── /pages                // Next.js의 페이지 컴포넌트를 보관하는 디렉토리
+│   │   ├── /api              // API 라우트를 정의하는 디렉토리 (간단한 백엔드 로직 처리 가능)
+│   │   │   ├── hello.ts      // 기본적인 API 예제 파일, `/api/hello`에서 접근 가능
+│   │   ├── _app.tsx          // Next.js의 커스텀 앱 컴포넌트, 전역 레이아웃 설정
+│   │   ├── _document.tsx     // Next.js의 커스텀 문서 파일, HTML 구조 수정 가능
+│   │   ├── index.tsx         // 메인 페이지 컴포넌트, 홈페이지로 사용
+│   │   ├── dashboard.tsx     // 대시보드 페이지 컴포넌트
+│   │   └── profile.tsx       // 프로필 페이지 컴포넌트
+│   ├── /tests                // Jest를 사용한 프론트엔드 테스트 파일들을 보관하는 디렉토리
+│   │   ├── /unit             // 단위 테스트 파일들
+│   │   ├── /integration      // 통합 테스트 파일들
+│   │   └── /e2e              // End-to-End 테스트 파일들
+│   ├── /cypress              // Cypress를 사용한 E2E 테스트를 보관하는 디렉토리
+│   │   ├── /integration      // Cypress 통합 테스트 파일들
+│   │   ├── /fixtures         // 테스트에 필요한 고정 데이터 파일들
+│   │   └── /support          // Cypress 설정 및 헬퍼 파일들
+│   ├── next-env.d.ts         // Next.js 환경 변수 타입 정의 파일
+│   ├── next.config.js        // Next.js 설정 파일, 이미지 최적화, 경로 별 설정 등을 관리
+│   ├── package.json          // 프론트엔드 종속성 정보, 스크립트 관리
+│   ├── tsconfig.json         // TypeScript 설정 파일, 컴파일러 옵션 설정
+│   ├── .eslintrc.js          // ESLint 설정 파일, 코드 스타일 검사 규칙 설정
+│   ├── .prettierrc           // Prettier 코드 포맷 설정 파일, 코드 스타일 포맷팅 설정
+│   └── webpack.config.js     // Webpack 설정 파일, 필요시 Next.js와 함께 사용 가능
 │
-├── /backend                  // Nest.js 백엔드 애플리케이션
-│   ├── /src
-│   │   ├── /controllers      // Nest.js 컨트롤러
-│   │   │   ├── user.controller.ts
-│   │   │   └── nutrition.controller.ts
-│   │   ├── /services         // Nest.js 서비스
-│   │   │   ├── user.service.ts
-│   │   │   └── nutrition.service.ts
-│   │   ├── /models           // TypeORM을 사용한 DB 모델 정의
-│   │   │   ├── user.entity.ts
-│   │   │   └── nutrition.entity.ts
-│   │   ├── /middlewares      // Nest.js 미들웨어
-│   │   │   ├── logger.middleware.ts
-│   │   │   └── auth.middleware.ts
-│   │   ├── /config           // 환경설정 파일
-│   │   │   ├── database.config.ts
-│   │   │   └── jwt.config.ts
-│   │   ├── /utils            // 유틸리티 함수들
-│   │   ├── /dto              // Data Transfer Objects 정의
-│   │   │   ├── user.dto.ts
-│   │   │   └── nutrition.dto.ts
-│   │   ├── /guards           // Nest.js 가드
-│   │   │   └── auth.guard.ts
-│   │   ├── /pipes            // Nest.js 파이프
-│   │   │   └── validation.pipe.ts
-│   │   ├── /interceptors     // Nest.js 인터셉터
-│   │   │   └── transform.interceptor.ts
-│   │   ├── /decorators       // 커스텀 데코레이터
-│   │   ├── /repositories     // 데이터 접근 레이어
-│   │   │   ├── user.repository.ts
-│   │   │   └── nutrition.repository.ts
-│   │   ├── app.module.ts     // 메인 Nest.js 모듈
-│   │   └── main.ts           // Nest.js 애플리케이션 엔트리 포인트
-│   ├── /test                 // Jest를 사용한 백엔드 테스트 파일들
-│   │   ├── /unit
-│   │   ├── /integration
-│   │   └── /e2e
-│   ├── package.json          // 백엔드 종속성 정보
-│   ├── nest-cli.json         // Nest CLI 설정 파일
-│   ├── tsconfig.json         // TypeScript 설정 파일
-│   ├── .eslintrc.js          // ESLint 설정 파일
-│   └── .prettierrc           // Prettier 코드 포맷 설정 파일
+├── /backend                  // Nest.js 백엔드 애플리케이션의 루트 디렉토리
+│   ├── /src                  // 소스 파일들을 보관하는 디렉토리
+│   │   ├── /controllers      // Nest.js 컨트롤러 파일들을 보관하는 디렉토리
+│   │   │   ├── user.controller.ts // 사용자 관련 요청을 처리하는 컨트롤러
+│   │   │   └── nutrition.controller.ts // 영양 정보 관련 요청을 처리하는 컨트롤러
+│   │   ├── /services         // 비즈니스 로직을 처리하는 서비스 파일들을 보관하는 디렉토리
+│   │   │   ├── user.service.ts // 사용자 관련 비즈니스 로직 처리
+│   │   │   └── nutrition.service.ts // 영양 정보 관련 비즈니스 로직 처리
+│   │   ├── /models           // 데이터베이스 모델을 정의하는 파일들을 보관하는 디렉토리
+│   │   │   ├── user.entity.ts // 사용자 엔티티 정의 파일 (TypeORM)
+│   │   │   └── nutrition.entity.ts // 영양 정보 엔티티 정의 파일 (TypeORM)
+│   │   ├── /middlewares      // Nest.js 미들웨어 파일들을 보관하는 디렉토리
+│   │   │   ├── logger.middleware.ts // 로깅 관련 미들웨어
+│   │   │   └── auth.middleware.ts // 인증 관련 미들웨어
+│   │   ├── /config           // 환경 설정 파일들을 보관하는 디렉토리
+│   │   │   ├── database.config.ts // 데이터베이스 연결 설정 파일
+│   │   │   └── jwt.config.ts // JWT 인증 설정 파일
+│   │   ├── /utils            // 유틸리티 함수들을 보관하는 디렉토리
+│   │   ├── /dto              // Data Transfer Object (DTO)를 정의하는 파일들
+│   │   │   ├── user.dto.ts   // 사용자 관련 DTO 정의
+│   │   │   └── nutrition.dto.ts // 영양 정보 관련 DTO 정의
+│   │   ├── /guards           // Nest.js 가드를 보관하는 디렉토리
+│   │   │   └── auth.guard.ts // 인증 가드, 특정 요청을 보호
+│   │   ├── /pipes            // Nest.js 파이프를 보관하는 디렉토리
+│   │   │   └── validation.pipe.ts // 요청 데이터 유효성 검증 파이프
+│   │   ├── /interceptors     // Nest.js 인터셉터를 보관하는 디렉토리
+│   │   │   └── transform.interceptor.ts // 응답 데이터를 변환하는 인터셉터
+│   │   ├── /decorators       // 커스텀 데코레이터를 보관하는 디렉토리
+│   │   ├── /repositories     // 데이터 접근 레이어, Repository 패턴 적용
+│   │   │   ├── user.repository.ts // 사용자 관련 데이터베이스 접근 로직
+│   │   │   └── nutrition.repository.ts // 영양 정보 관련 데이터베이스 접근 로직
+│   │   ├── app.module.ts     // 메인 Nest.js 모듈, 다른 모듈을 통합
+│   │   └── main.ts           // Nest.js 애플리케이션의 엔트리 포인트
+│   ├── /test                 // Jest를 사용한 백엔드 테스트 파일들을 보관하는 디렉토리
+│   │   ├── /unit             // 단위 테스트 파일들
+│   │   ├── /integration      // 통합 테스트 파일들
+│   │   └── /e2e              // End-to-End 테스트 파일들
+│   ├── package.json          // 백엔드 종속성 정보, 스크립트 관리
+│   ├── nest-cli.json         // Nest CLI 설정 파일, 빌드 및 실행 설정
+│   ├── tsconfig.json         // TypeScript 설정 파일, 컴파일러 옵션 설정
+│   ├── .eslintrc.js          // ESLint 설정 파일, 코드 스타일 검사 규칙 설정
+│   └── .prettierrc           // Prettier 코드 포맷 설정 파일, 코드 스타일 포맷팅 설정
 │
-├── /infrastructure           // 인프라 관련 파일들
-│   ├── /terraform            // Terraform 코드 (AWS 리소스 설정)
-│   │   ├── main.tf
-│   │   ├── variables.tf
-│   │   ├── outputs.tf
-│   │   ├── /modules          // Terraform 모듈
-│   │   │   ├── /vpc
-│   │   │   ├── /ec2
-│   │   │   └── /rds
-│   │   └── terraform.tfvars
-│   ├── /docker               // Docker 설정 파일들
-│   │   ├── Dockerfile.frontend
-│   │   ├── Dockerfile.backend
-│   │   └── docker-compose.yml
-│   ├── /kubernetes           // Kubernetes 배포 파일들
-│   │   ├── /deployments
-│   │   │   ├── frontend.yaml
-│   │   │   └── backend.yaml
-│   │   ├── /services
-│   │   │   ├── frontend-service.yaml
-│   │   │   └── backend-service.yaml
-│   │   ├── /ingress
-│   │   │   └── ingress.yaml
-│   │   └── /configmaps
-│   │       └── app-config.yaml
-│   ├── /scripts              // 배포 자동화 스크립트
-│   │   ├── deploy.sh
-│   │   └── rollback.sh
-│   ├── /helm                 // Helm 차트
-│   │   ├── Chart.yaml
-│   │   ├── values.yaml
-│   │   └── /templates
-│   ├── /secrets              // 비밀 정보 관리
-│   │   └── .gitignore
-│   ├── /monitoring           // 모니터링 설정
-│   │   ├── /prometheus
-│   │   │   └── prometheus.yml
-│   │   └── /grafana
-│   │       └── dashboards.json
-│   └── /logging              // 로깅 설정
-│       ├── /elasticsearch
-│       ├── /logstash
-│       └── /kibana
+├── /infrastructure           // 인프라 관련 파일들을 보관하는 디렉토리
+│   ├── /terraform            // Terraform 코드로 AWS 리소스를 설정하는 파일들
+│   │   ├── main.tf           // 주요 Terraform 설정 파일
+│   │   ├── variables.tf      // Terraform 변수 설정 파일
+│   │   ├── outputs.tf        // Terraform 출력 설정 파일
+│   │   ├── /modules          // 재사용 가능한 Terraform 모듈들
+│   │   │   ├── /vpc          // VPC 설정 모듈
+│   │   │   ├── /ec2          // EC2 인스턴스 설정 모듈
+│   │   │   └── /rds          // RDS 설정 모듈
+│   │   └── terraform.tfvars  // Terraform 환경 변수 파일
+│   ├── /docker               // Docker 설정 파일들을 보관하는 디렉토리
+│   │   ├── Dockerfile.frontend // 프론트엔드 Docker 이미지 빌드 설정
+│   │   ├── Dockerfile.backend  // 백엔드 Docker 이미지 빌드 설정
+│   │   └── docker-compose.yml // 여러 컨테이너를 관리하기 위한 Docker Compose 설정
+│   ├── /kubernetes           // Kubernetes 배포 파일들을 보관하는 디렉토리
+│   │   ├── /deployments      // Kubernetes 배포 관련 설정 파일
+│   │   │   ├── frontend.yaml // 프론트엔드 애플리케이션 배포 설정
+│   │   │   └── backend.yaml  // 백엔드 애플리케이션 배포 설정
+│   │   ├── /services         // Kubernetes 서비스 설정 파일
+│   │   │   ├── frontend-service.yaml // 프론트엔드 서비스 설정
+│   │   │   └── backend-service.yaml  // 백엔드 서비스 설정
+│   │   ├── /ingress          // Kubernetes Ingress 설정 파일
+│   │   │   └── ingress.yaml  // 인그레스 설정 파일 (도메인 및 경로 매핑)
+│   │   └── /configmaps       // Kubernetes ConfigMap 설정 파일
+│   │       └── app-config.yaml // 애플리케이션 설정을 위한 ConfigMap
+│   ├── /scripts              // 배포 자동화 스크립트들을 보관하는 디렉토리
+│   │   ├── deploy.sh         // 애플리케이션 배포 스크립트
+│   │   └── rollback.sh       // 배포 롤백 스크립트
+│   ├── /helm                 // Helm 차트 관련 파일들
+│   │   ├── Chart.yaml        // Helm 차트 기본 정보
+│   │   ├── values.yaml       // Helm 차트 설정 값
+│   │   └── /templates        // Helm 템플릿 파일들
+│   ├── /secrets              // 비밀 정보 관리 (환경 변수 등)
+│   │   └── .gitignore        // 비밀 정보를 Git에 커밋하지 않도록 설정
+│   ├── /monitoring           // 모니터링 설정 파일들을 보관하는 디렉토리
+│   │   ├── /prometheus       // Prometheus 설정 파일들
+│   │   │   └── prometheus.yml // Prometheus 설정 파일
+│   │   └── /grafana          // Grafana 대시보드 설정 파일들
+│   │       └── dashboards.json // Grafana 대시보드 설정 JSON 파일
+│   └── /logging              // 로깅 설정 파일들을 보관하는 디렉토리
+│       ├── /elasticsearch    // Elasticsearch 설정 파일들
+│       ├── /logstash         // Logstash 설정 파일들
+│       └── /kibana           // Kibana 설정 파일들
 │
-├── /database                 // 데이터베이스 관련 파일들
+├── /database                 // 데이터베이스 관련 파일들을 보관하는 디렉토리
 │   ├── /migrations           // TypeORM 마이그레이션 파일들
 │   ├── /seeds                // 초기 데이터 삽입 스크립트
-│   ├── schema.sql            // MySQL DB 스키마 정의
+│   ├── schema.sql            // MySQL DB 스키마 정의 파일
 │   └── /backups              // 데이터베이스 백업 스크립트
 │
-├── /docs                     // 프로젝트 문서화
-│   ├── /api                  // API 문서화 (Swagger/OpenAPI)
-│   │   └── swagger.json
+├── /docs                     // 프로젝트 문서화를 위한 파일들을 보관하는 디렉토리
+│   ├── /api                  // API 문서화 파일들 (Swagger/OpenAPI)
+│   │   └── swagger.json      // Swagger API 정의 파일
 │   ├── /architecture         // 시스템 아키텍처 문서
-│   │   ├── system-design.md
-│   │   └── database-schema.md
-│   ├── /requirements         // 요구사항 명세서
-│   └── /development          // 개발 가이드 및 규칙
+│   │   ├── system-design.md  // 시스템 설계 문서
+│   │   └── database-schema.md // 데이터베이스 스키마 문서
+│   ├── /requirements         // 요구사항 명세서 파일들
+│   └── /development          // 개발 가이드 및 규칙 문서
 │
-├── /scripts                  // 유틸리티 스크립트
+├── /scripts                  // 유틸리티 스크립트들을 보관하는 디렉토리
 │   ├── setup-dev.sh          // 개발 환경 설정 스크립트
 │   └── generate-env.sh       // 환경 변수 생성 스크립트
 │
-├── /config                   // 전역 설정 파일
+├── /config                   // 전역 설정 파일들을 보관하는 디렉토리
 │   ├── .env.example          // 환경 변수 예제 파일
-│   └── global-config.js      // 전역 설정
+│   └── global-config.js      // 전역 설정 파일, 애플리케이션 전반의 설정 관리
 │
-├── /.github                  // GitHub 관련 설정
-│   └── /workflows            // GitHub Actions CI/CD 워크플로우
-│       ├── ci.yml
-│       └── cd.yml
+├── /.github                  // GitHub 관련 설정 파일들을 보관하는 디렉토리
+│   └── /workflows            // GitHub Actions CI/CD 워크플로우 설정 파일
+│       ├── ci.yml            // CI 파이프라인 설정 파일
+│       └── cd.yml            // CD 파이프라인 설정 파일
 │
-├── README.md                 // 프로젝트 설명 및 가이드
-├── CONTRIBUTING.md           // 기여 가이드라인
-├── CHANGELOG.md              // 변경사항 기록
-├── LICENSE                   // 라이선스 정보
-├── .gitignore                // Git에 포함되지 않을 파일들
+├── README.md                 // 프로젝트 설명 및 가이드 문서
+├── CONTRIBUTING.md           // 기여 가이드라인 문서
+├── CHANGELOG.md              // 변경사항 기록 문서
+├── LICENSE                   // 라이선스 정보 파일
+├── .gitignore                // Git에 포함되지 않을 파일들 목록 설정 파일
 ├── .env                      // 환경 변수 파일 (git에 포함되지 않음)
 ├── package.json              // 프로젝트 전체 스크립트 및 종속성 정보
 └── lerna.json                // Lerna 설정 파일 (모노레포 관리용, 필요 시)
