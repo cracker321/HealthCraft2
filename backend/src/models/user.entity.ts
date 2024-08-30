@@ -64,19 +64,59 @@ export class User { // '클래스 User' 를 정의함.
   @Exclude()
   password: string;
 
+
+
+  // < 비밀번호 초기화 토큰 및 만료 시간 열 생성 >
   
-  // < 비밀번호 재성정 토큰 및 만료 시간 열 생성 >
   // - 'resetPasswordToken 속성'
-  //   : 사용자가 비밀번
+  //   : 사용자가 비밀번호를 재설정하려고 할 때, 이 필드에 임시 토큰을 저장함.
+  //     이 토큰은 이메일로 사용자에게 전송되어, 비밀번호를 재설정하는 데 사용됨.
+  //     즉, 비밀번호 재설정을 위한 고유한 토큰을 저장하는 데 사용되는 속성임.
+  //     이는 사용자가 요청할 때만 생성됨.
+  // - 'nullable true'
+  //   : 이 설정은 필드가 null 값을 가질 수 있음을 의미함. 
+  //     즉, 사용자가 비밀번호 재설정을 요청하지 않았다면 이 필드는 비어 있을 수 있음.
   @Column({ nullable: true })
   resetPasswordToken: string;
+
+
+  // < 비밀번호 초기화 만료 시간 컬럼 >
+
+  // - 'resetPasswordToken 속성'
+  //   : 이 속성은 'resetPasswordToken'이 언제까지 유효한지를 저장하는 필드임. 
+  //     즉, '임시 번호의 만료 시간'을 저장함.
+  //     보안상의 이유로, 토큰은 제한된 시간 동안만 유효하도록 설정됨.
+  //     즉, resetPaswordToken 토큰의 유효 기간을 관리하는 속성임.
+  //     유효기간이 지나면 사용자는 이 토큰을 사용할 수 없으면, 새로운 토큰을 요청해야 함.
+  //     비유하자면, 마치 학생이 받은 임시 비밀번호가 일정 시간이 지나면 만료되는 것과 같음.
+  //     이 시간이 지나면 더 이상 사용할 수 없음.
+  // - 테이블로 표현
+  //   id	resetPasswordExpires
+  //    1	2024-09-01T12:00:00Z
+  //    2	null
 
   @Column({ nullable: true })
   resetPasswordExpires: Date;
 
+
+  // - @CreateDateColumn() 데코레이터
+  //   : CreatedAt 이라는 열 column 을 생성하여, 이 DB 행 row 가 처음 생성된 날짜와 시간을 자동으로 기록함.
+  //     즉, '해당 User 객체'가 DB 에 처음 삽입되었을 때, 그 시점의 날짜와 시간이 createdAt 컬럼에 기록됨.
+  //     만약, DB 에 새로운 'User 레코드'를 추가하면, 그 순간의 시간(예: 2024년 8월 28일 10:00:00)을 createdAt 열에 자동으로 저장됨!!
+  // - 'Date'
+  //   : 'createdAt 속성' 이 'Date 타입'인 것을 정의해줌.
+  // - 테이블로 표현
+  // id	    createdAt
+  // 1	    2024-08-28T10:00:00Z
+  // 2	    2024-08-28T11:00:00Z
   @CreateDateColumn()
   createdAt: Date;
 
+
+
+  // - @UpdateDateColumn() 데코레이터
+  //   : updateAt 이라는 컬럼 열을 생성하며, 이 레코드가 마지막으로 수정된 시점을 자동으로 기록함.
+  //     즉, 현재 이 '해당 User 객체'의 정보가 마지막으로 업데이트된 날짜와 시간을 저장하는 역할임.
   @UpdateDateColumn()
   updatedAt: Date;
 }
