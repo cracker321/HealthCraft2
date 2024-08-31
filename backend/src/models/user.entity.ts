@@ -1,5 +1,8 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 // - TypeORM 라이브러리에서 필요한 기능들을 가져옴.
+// - TypeORM
+//   : TypeScript 와 JavaScript 를 위한 ORM(Object-Relational Mapping) 라이브러리로,
+//     DB 작업을 객체지향적으로 할 수 있게 해줌.
 // - Entity
 //   : 이 데코레이터는 클래스가 DB 테이블로 매핑되도록 지정함.
 // - PrimaryGeneratedColumn
@@ -10,22 +13,54 @@ import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateCol
 // - UpdateDateColumn
 //   : 이 데코레이터는 DB 행 row 가 마지막으로 업데이트된 날짜와 시간을 기록하는 열 column 을 만듦.
 //     비유하자면, 집을 마지막으로 리모델링한 날짜를 기록하는 것과 같음. 
-//     이 집이 맞미ㅏㄱ으로 언제 손질되었는지를 알 수 있음.
+//     이 집이 마지막으로 언제 손질되었는지를 알 수 있음.
 
 import { Exclude } from 'class-transformer';
+// - class-transformer
+//   : 클래스 인스턴스 객체를 다른 형태(e.g: JSON 등)로 변환할 때,
+//     특정 속성을 포함하거나 제외할 수 있게 해주는 라이브러리
 // - Exclude
-//   : Exclude 는 '라이브러리 class-transformer' 에서 제공되는 기능으로, 클래스의 특정 속성을 직렬화 Serialization 과정에서 
+//   : Exclude 는 '라이브러리 class-transformer' 에서 제공되는 기능으로, 클래스의 특정 속성을 직렬화 Serialization 과정에서
 //     제외할 수 있도록 해줌.
 //     직렬화는 객체를 JSON 과 같은 형식으로 변환하는 과정임.
 //     즉, Exclude 데코레이터는 특정 속성이 JSON 과 같은 형식으로 변환 직렬화될 때 제외되도록 설정함.
 //     예를 들어, 비밀번호와 같은 민감한 정보를 API 응답에서 제외하고 싶을 때 유용함.
-//     비유하자면, 중요한 문서를 복사할 때, 개인 정보와 같은 민감한 부분을 가려서 복사하는 것과 같음. 
-//     복사된 문서에는 개인정보가 노출되지 않도록 보호하는 것이 'Exxclude 데코레이터'의 역할임
+//     비유하자면, 중요한 문서를 복사할 때, 개인 정보와 같은 민감한 부분을 가려서 복사하는 것과 같음.
+//     복사된 문서에는 개인정보가 노출되지 않도록 보호하는 것이 'Exxclude 데코레이터'의 역할임.
+//     즉, 'User 클래스'에서 'password 필드'에 '@Exclude 데코레이터'를 붙이면,
+//     이 'password 필드'는 JSON 으로 변환될 때 제외됨.
+//     즉, 클라이언트로 전송되는 데이터에는 비밀번호가 포함되지 않음.
 
+import { IsEmail, IsNotEmpty, MinLength, IsOptional, IsDate } from 'class-validator';
+// - class-validator
+//   : 클래스의 속성에 '유효성 검사'를 적용할 수 있는 라이브러리
+// - IsEmail
+//   : 이 데코레이터는 'email 필드'가 유효한 이메일 형식인지 확인함.
+//     이메일 형식은 반드시 'example@domain.com' 형식이야 함.
+//     즉, 이메일 주소에 반드시 '@' 와 '.'이 포함되어야 함.
+// - IsNotEmpty
+//   : 이 데코레이터는 이 데코레이터가 붙어 있는 필드가 비어 있지 않은지 검사함.
+//     즉, 사용자가 반드시 필수적으로 입력하여야 하는 필드(정보)에 사용됨.
+//     만약, 사용자가 이 데코레이터가 붙어 있는 필드에 아무것도 입력하지 않으면 에러가 발생함.
+//     예를 들어, 'User 클래스'에서 'username 필드'에 '@IsNotEmpty'를 사용하면,
+//     사용자가 이 필드에 어떤 정보도 입력하지 않는다면, 오류가 발생함.
+// - MinLength
+//   : 이 데코레이터는 문자열의 최소 길이를 설정함. 예를 들어, 비밀번호는 최소 8자 이상이어야 한다는 조건 등
+// - IsOptional
+//   : 이 데코레이터가 붙어 있는 필드는 '선택적'임을 명시함.
+//     즉, 이 필드에 사용자가 데이터를 입력하지 않아도 오류가 발생되지 않음.
+// - IsDate
+//   : 이 데코레이터가 붙어 있는 필드는 반드시 유효한 날짜 형식이어야 함.
+//     날짜를 저장하는 필드에 사용됨.
+//     예를 들어, 'User 클래스'에서 'resetPasswordExpries 필드'에 '@IsDate'를 붙이면,
+//     이 필드가 유효한 날짜 형식이 아닌 경우 오류가 발생함.
+//     예를 들어, '2024-08-31'과 같은 형식이어야 함.
 
 
 @Entity()
 export class User { // '클래스 User' 를 정의함.
+
+
 
 
   // - '@PrimaryGeneratedColumn() 데코레이터'
@@ -48,6 +83,7 @@ export class User { // '클래스 User' 를 정의함.
   //   : 이 설정은 이메일 주소가 DB 내에서 중복되지 않도록 보장함.
   //     즉, 동일한 이메일을 가진 두 개의 레코드가 존재할 수 없는 것임!!
   @Column({ unique: true })
+  @IsEmail()
   email: string;
 
   @Column()
