@@ -1,3 +1,19 @@
+// User 엔티티:
+
+// 시스템의 핵심 엔티티로 모든 사용자 관련 정보 저장
+// 기본적인 인증 정보(이메일, 암호화된 비밀번호) 포함
+// 개인 프로필 정보(이름, 성별, 생년월일 등) 관리
+// 계정 상태 및 활동 추적(생성일, 마지막 로그인 등)
+// 개인정보 보호를 위한 중요 데이터 암호화 고려
+// 사용자 활동 및 보안 모니터링에 활용
+// 연관 관계:
+
+// HealthProfile과 1:N 관계 (한 사용자는 여러 건강 프로필을 가질 수 있음)
+// NutritionPlan과 1:N 관계 (한 사용자는 여러 영양 계획을 가질 수 있음)
+// MealRecord와 1:N 관계 (한 사용자는 여러 식사 기록을 가질 수 있음)
+// ExerciseRecord와 1:N 관계 (한 사용자는 여러 운동 기록을 가질 수 있음)
+// Allergy, DietaryRestriction과 각각 1:N 관계
+
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 // - TypeORM 라이브러리에서 필요한 기능들을 가져옴.
 // - TypeORM
@@ -31,7 +47,7 @@ import { Exclude } from 'class-transformer';
 //     이 'password 필드'는 JSON 으로 변환될 때 제외됨.
 //     즉, 클라이언트로 전송되는 데이터에는 비밀번호가 포함되지 않음.
 
-import { IsEmail, IsNotEmpty, MinLength, IsOptional, IsDate } from 'class-validator';
+import { IsEmail, IsNotEmpty, MinLength, IsOptional, IsDate, IsEnum } from 'class-validator';
 // - class-validator
 //   : 클래스의 속성에 '유효성 검사'를 적용할 수 있는 라이브러리
 // - IsEmail
@@ -57,6 +73,7 @@ import { IsEmail, IsNotEmpty, MinLength, IsOptional, IsDate } from 'class-valida
 //     예를 들어, '2024-08-31'과 같은 형식이어야 함.
 
 import { HealthProfile } from './health-profile.entity';
+import { NutritionPlan } from './nutrition-plan.entity';
 import { MealRecord } from './meal-record.entity';
 import { ExerciseRecord } from './exercise-record.entity';
 import { WaterIntakeRecord } from './water-intake-record.entity';
@@ -64,6 +81,8 @@ import { SleepRecord } from './sleep-record.entity';
 import { MoodRecord } from './mood-record.entity';
 import { SupplementRecord } from './supplement-record.entity';
 import { BloodSugarRecord } from './blood-sugar-record.entity';
+import { Allergy } from './allergy.entity';
+import { DietaryRestriction } from './dietary-restriction.entity';
 
 
 @Entity()
@@ -151,6 +170,23 @@ export class User { // '클래스 User' 를 정의함.
   resetPasswordExpires: Date;
 
 
+  @Column()
+  @IsNotEmpty({ message: '이름은 필수 입력 항목입니다.' })
+  firstName: string;
+
+  @Column()
+  @IsNotEmpty({ message: '성은 필수 입력 항목입니다.' })
+  lastName: string;
+
+  @Column()
+  @IsDate({ message: '유효한 생년월일 형식이 아닙니다.' })
+  dateOfBirth: Date;
+
+  @Column()
+  @IsEnum(['male', 'female', 'other'], { message: '유효한 성별을 선택해주세요.' })
+  gender: string;
+
+
   // - @CreateDateColumn() 데코레이터
   //   : CreatedAt 이라는 열 column 을 생성하여, 이 DB 행 row 가 처음 생성된 날짜와 시간을 자동으로 기록함.
   //     즉, '해당 User 객체'가 DB 에 처음 삽입되었을 때, 그 시점의 날짜와 시간이 createdAt 컬럼에 기록됨.
@@ -173,8 +209,12 @@ export class User { // '클래스 User' 를 정의함.
   updatedAt: Date;
 
 
+  // 관계 정의
   @OneToMany(() => HealthProfile, healthProfile => healthProfile.user)
   healthProfiles: HealthProfile[];
+
+  @OneToMany(() => NutritionPlan, nutritionPlan => nutritionPlan.user)
+  nutritionPlans: NutritionPlan[];
 
   @OneToMany(() => MealRecord, mealRecord => mealRecord.user)
   mealRecords: MealRecord[];
@@ -196,5 +236,10 @@ export class User { // '클래스 User' 를 정의함.
 
   @OneToMany(() => BloodSugarRecord, bloodSugarRecord => bloodSugarRecord.user)
   bloodSugarRecords: BloodSugarRecord[];
-  
+
+  @OneToMany(() => Allergy, allergy => allergy.user)
+  allergies: Allergy[];
+
+  @OneToMany(() => DietaryRestriction, dietaryRestriction => dietaryRestriction.user)
+  dietaryRestrictions: DietaryRestriction[];
 }

@@ -1,8 +1,6 @@
 지시어: 이 기술스택들을 하나도 빠짐없이 모두 다 모두 사용할거야. 이 프로젝트 폴더 구조에서 내가 이 기술스택들을 다 사용함에 있어서 빠뜨린 폴더나 파일들 있으면 싹 다 다 포함시키고, 그리고 훨씬 더 구체적이고 상세하게 폴더 및 파일들을 더 포함시켜서 말해줘.
 
 
-
-
 /health-craft
 │
 ├── /frontend                 // Next.js 프론트엔드 애플리케이션의 루트 디렉토리
@@ -70,36 +68,58 @@
 ├── /backend                  // Nest.js 백엔드 애플리케이션의 루트 디렉토리
 │   ├── /src                  // 소스 파일들을 보관하는 디렉토리
 │   │   ├── /controllers      // Nest.js 컨트롤러 파일들을 보관하는 디렉토리
-│   │   │   ├── user.controller.ts // 사용자 관련 요청을 처리하는 컨트롤러
-│   │   │   └── nutrition.controller.ts // 영양 정보 관련 요청을 처리하는 컨트롤러
+│   │   │   ├── user.controller.ts       // 사용자 관련 요청을 처리하는 컨트롤러
+│   │   │   └── nutrition.controller.ts  // 영양 정보 관련 요청을 처리하는 컨트롤러
 │   │   ├── /services         // 비즈니스 로직을 처리하는 서비스 파일들을 보관하는 디렉토리
-│   │   │   ├── user.service.ts // 사용자 관련 비즈니스 로직 처리
-│   │   │   └── nutrition.service.ts // 영양 정보 관련 비즈니스 로직 처리
-│   │   ├── /models           // 데이터베이스 모델을 정의하는 파일들을 보관하는 디렉토리
-│   │   │   ├── user.entity.ts // 사용자 엔티티 정의 파일 (TypeORM)
-│   │   │   └── nutrition.entity.ts // 영양 정보 엔티티 정의 파일 (TypeORM)
+│   │   │   ├── user.service.ts          // 사용자 관련 비즈니스 로직 처리
+│   │   │   └── nutrition.service.ts     // 영양 정보 관련 비즈니스 로직 처리
+│   │   ├── /entities         // 데이터베이스 엔티티를 정의하는 파일들을 보관하는 디렉토리
+│   │   │   ├── user.entity.ts           // 사용자 엔티티 정의 파일 (TypeORM)
+│   │   │   └── nutrition.entity.ts      // 영양 정보 엔티티 정의 파일 (TypeORM)
 │   │   ├── /middlewares      // Nest.js 미들웨어 파일들을 보관하는 디렉토리
-│   │   │   ├── logger.middleware.ts // 로깅 관련 미들웨어
-│   │   │   └── auth.middleware.ts // 인증 관련 미들웨어
+│   │   │   ├── logger.middleware.ts     // 로깅 관련 미들웨어
+│   │   │   └── auth.middleware.ts       // 인증 관련 미들웨어
 │   │   ├── /config           // 환경 설정 파일들을 보관하는 디렉토리
-│   │   │   ├── database.config.ts // 데이터베이스 연결 설정 파일
-│   │   │   └── jwt.config.ts // JWT 인증 설정 파일
+│   │   │   ├── database.config.ts       // 데이터베이스 연결 설정 파일
+│   │   │   └── jwt.config.ts            // JWT 인증 설정 파일
 │   │   ├── /utils            // 유틸리티 함수들을 보관하는 디렉토리
+│   │   │   ├── date.utils.ts            // 날짜 관련 유틸리티 함수
+│   │   │   ├── crypto.utils.ts          // 암호화 관련 유틸리티 함수
+│   │   │   └── string.utils.ts          // 문자열 관련 유틸리티 함수
 │   │   ├── /dto              // Data Transfer Object (DTO)를 정의하는 파일들
-│   │   │   ├── user.dto.ts   // 사용자 관련 DTO 정의
-│   │   │   └── nutrition.dto.ts // 영양 정보 관련 DTO 정의
+│   │   │   ├── user.dto.ts              // 사용자 관련 DTO 정의
+│   │   │   └── nutrition.dto.ts         // 영양 정보 관련 DTO 정의
 │   │   ├── /guards           // Nest.js 가드를 보관하는 디렉토리
-│   │   │   └── auth.guard.ts // 인증 가드, 특정 요청을 보호
+│   │   │   └── auth.guard.ts            // 인증 가드, 특정 요청을 보호
 │   │   ├── /pipes            // Nest.js 파이프를 보관하는 디렉토리
-│   │   │   └── validation.pipe.ts // 요청 데이터 유효성 검증 파이프
+│   │   │   └── validation.pipe.ts       // 요청 데이터 유효성 검증 파이프
 │   │   ├── /interceptors     // Nest.js 인터셉터를 보관하는 디렉토리
 │   │   │   └── transform.interceptor.ts // 응답 데이터를 변환하는 인터셉터
 │   │   ├── /decorators       // 커스텀 데코레이터를 보관하는 디렉토리
+│   │   │   ├── roles.decorator.ts       // 역할 기반 접근 제어 데코레이터
+│   │   │   └── public.decorator.ts      // 공개된 라우트 데코레이터
 │   │   ├── /repositories     // 데이터 접근 레이어, Repository 패턴 적용
-│   │   │   ├── user.repository.ts // 사용자 관련 데이터베이스 접근 로직
-│   │   │   └── nutrition.repository.ts // 영양 정보 관련 데이터베이스 접근 로직
-│   │   ├── app.module.ts     // 메인 Nest.js 모듈, 다른 모듈을 통합
-│   │   └── main.ts           // Nest.js 애플리케이션의 엔트리 포인트
+│   │   │   ├── user.repository.ts       // 사용자 관련 데이터베이스 접근 로직
+│   │   │   └── nutrition.repository.ts  // 영양 정보 관련 데이터베이스 접근 로직
+│   │   ├── /filters          // Nest.js 예외 필터를 보관하는 디렉토리
+│   │   │   └── http-exception.filter.ts // HTTP 예외 필터
+│   │   ├── /modules          // 애플리케이션 모듈을 보관하는 디렉토리
+│   │   │   ├── user.module.ts           // 사용자 관련 모듈
+│   │   │   ├── nutrition.module.ts      // 영양 정보 관련 모듈
+│   │   │   ├── auth.module.ts           // 인증 관련 모듈
+│   │   │   └── app.module.ts            // 메인 Nest.js 모듈, 다른 모듈을 통합
+│   │   ├── /interfaces       // 인터페이스 파일들을 보관하는 디렉토리
+│   │   │   ├── user.interface.ts        // 사용자 관련 인터페이스
+│   │   │   └── nutrition.interface.ts   // 영양 정보 관련 인터페이스
+│   │   ├── /listeners        // 이벤트 리스너를 보관하는 디렉토리
+│   │   │   └── user.listener.ts         // 사용자 관련 이벤트 리스너
+│   │   ├── /events           // 이벤트 정의 파일들을 보관하는 디렉토리
+│   │   │   └── user.events.ts            // 사용자 관련 이벤트 정의
+│   │   ├── /subscribers      // TypeORM 엔티티 이벤트 구독자 파일들을 보관하는 디렉토리
+│   │   │   └── user.subscriber.ts       // 사용자 엔티티 이벤트 구독자
+│   │   ├── /exceptions       // 사용자 정의 예외 파일들을 보관하는 디렉토리
+│   │   │   └── user-not-found.exception.ts // 사용자 정의 예외 처리
+│   │   ├── main.ts           // Nest.js 애플리케이션의 엔트리 포인트
 │   ├── /test                 // Jest를 사용한 백엔드 테스트 파일들을 보관하는 디렉토리
 │   │   ├── /unit             // 단위 테스트 파일들
 │   │   ├── /integration      // 통합 테스트 파일들
