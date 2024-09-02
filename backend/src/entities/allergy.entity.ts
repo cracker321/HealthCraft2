@@ -11,7 +11,7 @@
 
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 import { IsNotEmpty, IsEnum, IsDate, IsOptional } from 'class-validator';
-import { User } from '../models/user.entity';
+import { User } from '../entities/user.entity';
 
 @Entity()
 export class Allergy {

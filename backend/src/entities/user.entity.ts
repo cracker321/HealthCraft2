@@ -209,9 +209,25 @@ export class User { // '클래스 User' 를 정의함.
   updatedAt: Date;
 
 
-  // 관계 정의
+  // =================================================================================================
+
+  
+
+  // [ 연관관계 정의 ]
+
+
+  // - @OneToMany
+  //   : 'User 엔티티' 와 'HealthProfile 엔티티' 간의 '1 : N 관계'를 정의.
+  //     이는 하나의 사용자 User 엔티티' 가 'N 개의 건강 프로필 HealthProfile' 을 가질 수 있음.
+  //     '부모(One, 사용자 User)' 는 'N 명의 자녀(Many, 건강 프로필 HealthProfile)'를 가질 수 있음.
+  //     이때 각각의 자녀(N 개의 건강 프로필 HeatlhProfile)들은 자신만의 특성을 가지고 있지만,
+  //     이는 모두 부모(1 명의 사용자 User)'와 연결되어 있음.
+  //     이 구조를 통해, 1 명의 사용자 User 아이디로 그 사용자의 N 개의 모든 건강 프로파일을 쉽게 검색할 수 있음.
+  //     비유하자면, 한 사람이 운동 관련 건강 프로필, 식이요법 관련 건강 프로필 등 N 개의 건강 프로필들을 관리할 수 있음.
+  //     이처럼 한 사람은 N 개의 건강 프로필들을 가지고 있을 수 있음.
   @OneToMany(() => HealthProfile, healthProfile => healthProfile.user)
   healthProfiles: HealthProfile[];
+
 
   @OneToMany(() => NutritionPlan, nutritionPlan => nutritionPlan.user)
   nutritionPlans: NutritionPlan[];
