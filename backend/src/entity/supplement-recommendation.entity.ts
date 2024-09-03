@@ -9,7 +9,6 @@
 // User와 N:1 관계 (여러 추천이 한 사용자에 속함)
 // NutrientInfo와 M:N 관계 (하나의 추천은 여러 영양소와 관련될 수 있음)
 
-
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
 import { IsNotEmpty, IsNumber, Min, IsOptional } from 'class-validator';
 import { User } from './user.entity';
@@ -20,9 +19,11 @@ export class SupplementRecommendation {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  // 사용자와의 다대일 관계
   @ManyToOne(() => User, user => user.supplementRecommendations)
   user: User;
 
+  // 영양제 기본 정보
   @Column()
   @IsNotEmpty({ message: '영양제 이름은 필수입니다.' })
   supplementName: string;
@@ -36,10 +37,12 @@ export class SupplementRecommendation {
   @IsNotEmpty({ message: '복용량 단위는 필수입니다.' })
   dosageUnit: string;
 
+  // 복용 스케줄
   @Column('simple-json')
   @IsNotEmpty({ message: '복용 시기는 필수입니다.' })
   intakeSchedule: { [key: string]: boolean }; // 예: {"morning": true, "afternoon": false, "evening": true}
 
+  // 영양제 효과 및 주의사항
   @Column('text')
   @IsNotEmpty({ message: '예상 효과는 필수입니다.' })
   expectedBenefits: string;
@@ -52,10 +55,12 @@ export class SupplementRecommendation {
   @IsOptional()
   precautions?: string;
 
+  // 관련 영양소와의 다대다 관계
   @ManyToMany(() => NutrientInfo)
   @JoinTable()
   relatedNutrients: NutrientInfo[];
 
+  // 약물 및 식품 상호작용 정보
   @Column('simple-json', { nullable: true })
   @IsOptional()
   interactionsWithMedications?: { [medication: string]: string };
@@ -100,7 +105,17 @@ export class SupplementRecommendation {
     });
     return interactions;
   }
+
+  // 영양제 추천 이유 생성 메서드
+  generateRecommendationReason(): string {
+    let reason = `${this.supplementName} 추천 이유:\n`;
+    reason += `1. 예상 효과: ${this.expectedBenefits}\n`;
+    if (this.relatedNutrients.length > 0) {
+      reason += `2. 관련 영양소:\n`;
+      this.relatedNutrients.forEach(nutrient => {
+        reason += `   - ${nutrient.name}: ${nutrient.benefits}\n`;
+      });
+    }
+    return reason;
+  }
 }
-
-
-

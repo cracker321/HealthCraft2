@@ -9,7 +9,6 @@
 // User와 N:1 관계 (여러 계산 결과가 한 사용자에 속함)
 // MealRecord, FoodDatabase와 관련됨
 
-
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } from 'typeorm';
 import { IsNotEmpty, IsNumber, Min, IsDate } from 'class-validator';
 import { User } from './user.entity';
@@ -19,6 +18,7 @@ export class CalorieCalculation {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  // 사용자와의 다대일 관계
   @ManyToOne(() => User, user => user.calorieCalculations)
   user: User;
 
@@ -27,6 +27,7 @@ export class CalorieCalculation {
   @IsDate({ message: '유효한 날짜 형식이 아닙니다.' })
   calculationDate: Date;
 
+  // 음식 목록 및 영양 정보
   @Column('simple-json')
   @IsNotEmpty({ message: '음식 목록은 필수입니다.' })
   foodItems: { [foodName: string]: number }; // 음식 이름과 그램 수
@@ -76,12 +77,10 @@ export class CalorieCalculation {
     let summary = `칼로리 계산 결과 (${this.calculationDate.toLocaleDateString()})\n\n`;
     summary += `총 칼로리: ${this.totalCalories} kcal\n\n`;
     summary += '영양 성분 분석:\n';
-    summary += `- 단백질: ${this.nutritionBreakdown.protein}g\n`;
-    summary += `- 탄수화물: ${this.nutritionBreakdown.carbs}g\n`;
-    summary += `- 지방: ${this.nutritionBreakdown.fat}g\n`;
-    summary += `- 식이섬유: ${this.nutritionBreakdown.fiber}g\n`;
-    summary += `- 당류: ${this.nutritionBreakdown.sugar}g\n\n`;
-    summary += '음식 목록:\n';
+    for (const [nutrient, amount] of Object.entries(this.nutritionBreakdown)) {
+      summary += `- ${nutrient}: ${amount}g\n`;
+    }
+    summary += '\n음식 목록:\n';
     for (const [foodName, grams] of Object.entries(this.foodItems)) {
       summary += `- ${foodName}: ${grams}g\n`;
     }

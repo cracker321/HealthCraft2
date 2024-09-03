@@ -19,9 +19,11 @@ export class HealthReport {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  // 사용자와의 다대일 관계
   @ManyToOne(() => User, user => user.healthReports)
   user: User;
 
+  // 최근 건강 검진과의 일대일 관계
   @OneToOne(() => HealthCheckup)
   @JoinColumn()
   latestCheckup: HealthCheckup;
@@ -92,4 +94,3 @@ export class HealthReport {
     return comparison;
   }
 }
-

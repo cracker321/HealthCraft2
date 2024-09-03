@@ -14,7 +14,7 @@
 // ExerciseRecord와 1:N 관계 (한 사용자는 여러 운동 기록을 가질 수 있음)
 // Allergy, DietaryRestriction과 각각 1:N 관계
 
-import { OneToMany, Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { OneToMany, OneToOne, JoinColumn, Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 // - TypeORM 라이브러리에서 필요한 기능들을 가져옴.
 // - TypeORM
 //   : TypeScript 와 JavaScript 를 위한 ORM(Object-Relational Mapping) 라이브러리로,
@@ -382,7 +382,7 @@ export class User { // '클래스 User' 를 정의함.
   //             이는 프로그램이 실제로 동작하는 모습을 보여줌.
   //             비유하자면, 음식을 서빙하고, 손님이 음식을 먹으며 맛을 평가하는 것과 같음.
   //   순서 5) 동적 메모리 관리
-  //           : 런타임 시점에서 프로그램은 동적으로 메모리를 할당ㅎ아고 해제함.
+  //           : 런타임 시점에서 프로그램은 동적으로 메모리를 할당하고 해제함.
   //             가비지 컬렉션 Garbage Collection 시스템은 사용하지 않는 메모리를 자동으로 회수함.
   //             비유하자면, 음식을 먹고 남은 찌꺼기를 처리하거나, 필요 없는 접시를 치우는 과정과 같음.
   
@@ -396,9 +396,6 @@ export class User { // '클래스 User' 를 정의함.
   // - 즉, 컴파일 시점에서는 코드의 오류를 잡아주고, 
   //   런타임 시점에서는 실행 중 발생할 수 있는 문제를 처리함.
   
-  @OneToMany(() => HealthProfile, healthProfile => healthProfile.user)
-  healthProfiles: HealthProfile[];
-
   @OneToMany(() => NutritionPlan, nutritionPlan => nutritionPlan.user)
   nutritionPlans: NutritionPlan[];
 
@@ -408,15 +405,26 @@ export class User { // '클래스 User' 를 정의함.
   @OneToMany(() => ExerciseRecord, exerciseRecord => exerciseRecord.user)
   exerciseRecords: ExerciseRecord[];
 
-  @OneToMany(() => SupplementRecord, supplementRecord => supplementRecord.user)
-  supplementRecords: SupplementRecord[];
+  @OneToMany(() => HealthCheckup, healthCheckup => healthCheckup.user)
+  healthCheckups: HealthCheckup[];
 
-  @OneToMany(() => BloodSugarRecord, bloodSugarRecord => bloodSugarRecord.user)
-  bloodSugarRecords: BloodSugarRecord[];
+  @OneToMany(() => HealthReport, healthReport => healthReport.user)
+  healthReports: HealthReport[];
 
   @OneToMany(() => Allergy, allergy => allergy.user)
   allergies: Allergy[];
 
   @OneToMany(() => DietaryRestriction, dietaryRestriction => dietaryRestriction.user)
   dietaryRestrictions: DietaryRestriction[];
+
+  @OneToMany(() => CalorieCalculation, calorieCalculation => calorieCalculation.user)
+  calorieCalculations: CalorieCalculation[];
+
+  @OneToMany(() => SupplementRecommendation, supplementRecommendation => supplementRecommendation.user)
+  supplementRecommendations: SupplementRecommendation[];
+
+  // 현재 활성 상태인 HealthProfile을 가리키는 관계 추가
+  @OneToOne(() => HealthProfile)
+  @JoinColumn()
+  currentHealthProfile: HealthProfile;
 }

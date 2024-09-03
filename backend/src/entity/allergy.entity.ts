@@ -8,7 +8,6 @@
 
 // User와 N:1 관계 (여러 알레르기가 한 사용자에 속함)
 
-
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 import { IsNotEmpty, IsEnum, IsDate, IsOptional } from 'class-validator';
 import { User } from './user.entity';
@@ -18,6 +17,7 @@ export class Allergy {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  // 사용자와의 다대일 관계
   @ManyToOne(() => User, user => user.allergies)
   user: User;
 

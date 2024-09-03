@@ -18,9 +18,11 @@ export class ExerciseRecord {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  // 사용자와의 다대일 관계
   @ManyToOne(() => User, user => user.exerciseRecords)
   user: User;
 
+  // 운동 정보
   @Column()
   @IsNotEmpty({ message: '운동 종류는 필수입니다.' })
   exerciseType: string;

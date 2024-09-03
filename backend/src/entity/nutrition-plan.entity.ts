@@ -13,11 +13,10 @@
 
 // User와 N:1 관계 (여러 영양 계획이 한 사용자에 속함)
 // Recipe와 M:N 관계 (하나의 계획은 여러 레시피를 포함할 수 있고, 하나의 레시피는 여러 계획에 포함될 수 있음)
-
-
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
 import { IsNotEmpty, IsNumber, Min, IsDate, IsOptional } from 'class-validator';
 import { User } from './user.entity';
+import { HealthProfile } from './health-profile.entity';
 import { Recipe } from './recipe.entity';
 
 @Entity()
@@ -25,9 +24,14 @@ export class NutritionPlan {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  // 사용자 및 건강 프로필과의 다대일 관계
   @ManyToOne(() => User, user => user.nutritionPlans)
   user: User;
 
+  @ManyToOne(() => HealthProfile, healthProfile => healthProfile.nutritionPlans)
+  healthProfile: HealthProfile;
+
+  // 계획 시작일 및 종료일
   @Column()
   @IsNotEmpty({ message: '계획 시작일은 필수입니다.' })
   @IsDate({ message: '유효한 날짜 형식이 아닙니다.' })
@@ -38,6 +42,7 @@ export class NutritionPlan {
   @IsDate({ message: '유효한 날짜 형식이 아닙니다.' })
   endDate?: Date;
 
+  // 일일 영양 목표
   @Column('int')
   @IsNotEmpty({ message: '일일 칼로리 목표는 필수입니다.' })
   @IsNumber({}, { message: '일일 칼로리 목표는 숫자여야 합니다.' })
@@ -62,6 +67,7 @@ export class NutritionPlan {
   @Min(0, { message: '지방 목표는 0g 이상이어야 합니다.' })
   fatTarget: number;
 
+  // 식사 분배 및 식품 추천/제한 정보
   @Column('simple-json')
   mealDistribution: { [key: string]: number };
 
@@ -71,6 +77,7 @@ export class NutritionPlan {
   @Column('simple-array')
   foodsToAvoid: string[];
 
+  // 추천 레시피와의 다대다 관계
   @ManyToMany(() => Recipe)
   @JoinTable()
   recommendedRecipes: Recipe[];
@@ -89,5 +96,17 @@ export class NutritionPlan {
       carbProgress: (consumedCarbs / this.carbTarget) * 100,
       fatProgress: (consumedFat / this.fatTarget) * 100
     };
+  }
+
+  // 영양 계획에 레시피 추가 메서드
+  addRecipe(recipe: Recipe) {
+    if (!this.recommendedRecipes.find(r => r.id === recipe.id)) {
+      this.recommendedRecipes.push(recipe);
+    }
+  }
+
+  // 영양 계획에서 레시피 제거 메서드
+  removeRecipe(recipeId: string) {
+    this.recommendedRecipes = this.recommendedRecipes.filter(r => r.id !== recipeId);
   }
 }

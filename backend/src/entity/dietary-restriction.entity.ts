@@ -18,9 +18,11 @@ export class DietaryRestriction {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  // 사용자와의 다대일 관계
   @ManyToOne(() => User, user => user.dietaryRestrictions)
   user: User;
 
+  // 식이 제한 정보
   @Column()
   @IsNotEmpty({ message: '제한 유형은 필수입니다.' })
   @IsEnum(['vegetarian', 'vegan', 'gluten-free', 'lactose-free', 'nut-free', 'low-carb', 'low-fat', 'low-sodium', 'other'], 
@@ -52,6 +54,9 @@ export class DietaryRestriction {
   @Column('text', { nullable: true })
   @IsOptional()
   additionalNotes?: string;
+
+  @Column({ default: true })
+  isActive: boolean;
 
   @CreateDateColumn()
   createdAt: Date;
