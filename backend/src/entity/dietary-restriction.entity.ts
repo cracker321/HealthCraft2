@@ -9,6 +9,7 @@
 // User와 N:1 관계 (여러 제한 사항이 한 사용자에 속함)
 
 
+
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
 import { IsNotEmpty, IsEnum, IsDate, IsOptional } from 'class-validator';
 import { User } from './user.entity';
@@ -18,7 +19,7 @@ export class DietaryRestriction {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  // 사용자와의 다대일 관계
+  // User 와의 다대일 관계
   @ManyToOne(() => User, user => user.dietaryRestrictions)
   user: User;
 
@@ -64,8 +65,8 @@ export class DietaryRestriction {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  // 현재 활성 상태 확인 메서드
-  isActive(): boolean {
+  // 현재 활성 상태 확인 메서드 (이름 변경됨)
+  checkIfActive(): boolean {
     return !this.endDate || this.endDate > new Date();
   }
 
@@ -90,7 +91,10 @@ export class DietaryRestriction {
     if (this.alternativeFoods && this.alternativeFoods.length > 0) {
       summary += `대체 식품: ${this.alternativeFoods.join(', ')}\n`;
     }
-    summary += `현재 상태: ${this.isActive() ? '활성' : '비활성'}\n`;
+    summary += `현재 상태: ${this.checkIfActive() ? '활성' : '비활성'}\n`;
     return summary;
   }
 }
+
+
+

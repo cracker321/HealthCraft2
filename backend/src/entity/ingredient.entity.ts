@@ -9,7 +9,6 @@
 // Recipe와 M:N 관계
 // FoodDatabase와 1:1 또는 1:N 관계 (식재료 정보가 음식 데이터베이스의 일부가 될 수 있음)
 
-
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { IsNotEmpty, IsNumber, Min, IsOptional } from 'class-validator';
 
@@ -48,6 +47,8 @@ export class Ingredient {
 
 
 
+
+  
   //==========================================================================================================================================
 
 
@@ -126,11 +127,18 @@ export class Ingredient {
   //       'hobby 필드' 에 대한 정보는 '선택적'일 수 있음.
   //       왜냐하면, 모든 사람이 다 취미를 가지고 있는 것은 아니기 때문임.
   //       이 때, 'hobby?: string' 과 같은 형태로 선택적 속성을 정의할 수 있음.
+
+
   @Column('float', { nullable: true })
   @IsOptional()
   @IsNumber({}, { message: '식이섬유는 숫자여야 합니다.' })
   @Min(0, { message: '식이섬유는 0 이상이어야 합니다.' })
   fiber?: number; // 100g 당 식이섬유 (g)
+
+
+
+  //==========================================================================================================================================
+
 
   @Column('float', { nullable: true })
   @IsOptional()
@@ -157,28 +165,63 @@ export class Ingredient {
   updatedAt: Date;
 
   // 특정 양에 대한 영양 정보 계산 메서드
-  calculateNutritionForAmount(amount: number, unit: string): {calories: number, protein: number, carbs: number, fat: number} {
+  calculateNutritionForAmount(amount: number, unit: string): {calories: number, protein: number, carbs: number, fat: number, fiber?: number, sugar?: number} {
     const factor = this.convertToBaseUnit(amount, unit) / 100;
     return {
       calories: this.calories * factor,
       protein: this.protein * factor,
       carbs: this.carbs * factor,
-      fat: this.fat * factor
+      fat: this.fat * factor,
+      ...(this.fiber && { fiber: this.fiber * factor }),
+      ...(this.sugar && { sugar: this.sugar * factor })
     };
   }
 
   // 단위 변환 메서드 (예시, 실제로는 더 복잡할 수 있음)
   private convertToBaseUnit(amount: number, unit: string): number {
-    switch(unit) {
+    switch(unit.toLowerCase()) {
       case 'g':
         return amount;
       case 'kg':
         return amount * 1000;
       case 'oz':
         return amount * 28.35;
+      case 'lb':
+        return amount * 453.592;
+      case 'cup':
+        // 컵은 재료에 따라 다를 수 있으므로, 여기서는 예시로 1컵 = 250g으로 가정
+        return amount * 250;
       // 다른 단위들에 대한 변환 로직 추가
       default:
         return amount;
     }
+  }
+
+  // 영양 정보 요약 생성 메서드
+  generateNutritionSummary(): string {
+    let summary = `영양 정보 (100g 기준):\n`;
+    summary += `칼로리: ${this.calories} kcal\n`;
+    summary += `단백질: ${this.protein}g\n`;
+    summary += `탄수화물: ${this.carbs}g\n`;
+    summary += `지방: ${this.fat}g\n`;
+    if (this.fiber !== undefined) {
+      summary += `식이섬유: ${this.fiber}g\n`;
+    }
+    if (this.sugar !== undefined) {
+      summary += `당류: ${this.sugar}g\n`;
+    }
+    return summary;
+  }
+
+  // 알레르기 및 식이 제한 정보 요약 생성 메서드
+  generateRestrictionsSummary(): string {
+    let summary = '';
+    if (this.allergens && this.allergens.length > 0) {
+      summary += `알레르기 유발 성분: ${this.allergens.join(', ')}\n`;
+    }
+    if (this.dietaryRestrictions && this.dietaryRestrictions.length > 0) {
+      summary += `식이 제한: ${this.dietaryRestrictions.join(', ')}\n`;
+    }
+    return summary;
   }
 }

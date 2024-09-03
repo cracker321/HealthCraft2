@@ -14,7 +14,7 @@
 // ExerciseRecord와 1:N 관계 (한 사용자는 여러 운동 기록을 가질 수 있음)
 // Allergy, DietaryRestriction과 각각 1:N 관계
 
-import { OneToMany, OneToOne, JoinColumn, Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany, OneToOne, JoinColumn } from 'typeorm';
 // - TypeORM 라이브러리에서 필요한 기능들을 가져옴.
 // - TypeORM
 //   : TypeScript 와 JavaScript 를 위한 ORM(Object-Relational Mapping) 라이브러리로,
@@ -31,21 +31,6 @@ import { OneToMany, OneToOne, JoinColumn, Entity, Column, PrimaryGeneratedColumn
 //     비유하자면, 집을 마지막으로 리모델링한 날짜를 기록하는 것과 같음. 
 //     이 집이 마지막으로 언제 손질되었는지를 알 수 있음.
 
-import { Exclude } from 'class-transformer';
-// - class-transformer
-//   : 클래스 인스턴스 객체를 다른 형태(e.g: JSON 등)로 변환할 때,
-//     특정 속성을 포함하거나 제외할 수 있게 해주는 라이브러리
-// - Exclude
-//   : Exclude 는 '라이브러리 class-transformer' 에서 제공되는 기능으로, 클래스의 특정 속성을 직렬화 Serialization 과정에서
-//     제외할 수 있도록 해줌.
-//     직렬화는 객체를 JSON 과 같은 형식으로 변환하는 과정임.
-//     즉, Exclude 데코레이터는 특정 속성이 JSON 과 같은 형식으로 변환 직렬화될 때 제외되도록 설정함.
-//     예를 들어, 비밀번호와 같은 민감한 정보를 API 응답에서 제외하고 싶을 때 유용함.
-//     비유하자면, 중요한 문서를 복사할 때, 개인 정보와 같은 민감한 부분을 가려서 복사하는 것과 같음.
-//     복사된 문서에는 개인정보가 노출되지 않도록 보호하는 것이 'Exxclude 데코레이터'의 역할임.
-//     즉, 'User 클래스'에서 'password 필드'에 '@Exclude 데코레이터'를 붙이면,
-//     이 'password 필드'는 JSON 으로 변환될 때 제외됨.
-//     즉, 클라이언트로 전송되는 데이터에는 비밀번호가 포함되지 않음.
 
 import { IsEmail, IsNotEmpty, MinLength, IsOptional, IsDate, IsEnum } from 'class-validator';
 // - class-validator
@@ -72,17 +57,35 @@ import { IsEmail, IsNotEmpty, MinLength, IsOptional, IsDate, IsEnum } from 'clas
 //     이 필드가 유효한 날짜 형식이 아닌 경우 오류가 발생함.
 //     예를 들어, '2024-08-31'과 같은 형식이어야 함.
 
+
+
+import { Exclude } from 'class-transformer';
+// - class-transformer
+//   : 클래스 인스턴스 객체를 다른 형태(e.g: JSON 등)로 변환할 때,
+//     특정 속성을 포함하거나 제외할 수 있게 해주는 라이브러리
+// - Exclude
+//   : Exclude 는 '라이브러리 class-transformer' 에서 제공되는 기능으로, 클래스의 특정 속성을 직렬화 Serialization 과정에서
+//     제외할 수 있도록 해줌.
+//     직렬화는 객체를 JSON 과 같은 형식으로 변환하는 과정임.
+//     즉, Exclude 데코레이터는 특정 속성이 JSON 과 같은 형식으로 변환 직렬화될 때 제외되도록 설정함.
+//     예를 들어, 비밀번호와 같은 민감한 정보를 API 응답에서 제외하고 싶을 때 유용함.
+//     비유하자면, 중요한 문서를 복사할 때, 개인 정보와 같은 민감한 부분을 가려서 복사하는 것과 같음.
+//     복사된 문서에는 개인정보가 노출되지 않도록 보호하는 것이 'Exxclude 데코레이터'의 역할임.
+//     즉, 'User 클래스'에서 'password 필드'에 '@Exclude 데코레이터'를 붙이면,
+//     이 'password 필드'는 JSON 으로 변환될 때 제외됨.
+//     즉, 클라이언트로 전송되는 데이터에는 비밀번호가 포함되지 않음.
+
+
 import { HealthProfile } from './health-profile.entity';
 import { NutritionPlan } from './nutrition-plan.entity';
 import { MealRecord } from './meal-record.entity';
 import { ExerciseRecord } from './exercise-record.entity';
-import { WaterIntakeRecord } from './water-intake-record.entity';
-import { SleepRecord } from './sleep-record.entity';
-import { MoodRecord } from './mood-record.entity';
-import { SupplementRecord } from './supplement-record.entity';
-import { BloodSugarRecord } from './blood-sugar-record.entity';
+import { HealthCheckup } from './health-checkup.entity';
+import { HealthReport } from './health-report.entity';
 import { Allergy } from './allergy.entity';
 import { DietaryRestriction } from './dietary-restriction.entity';
+import { CalorieCalculation } from './calorie-calculation.entity';
+import { SupplementRecommendation } from './supplement-recommendation.entity';
 
 
 @Entity()
@@ -395,7 +398,10 @@ export class User { // '클래스 User' 를 정의함.
   //   런타임 시점: 예외를 처리함.
   // - 즉, 컴파일 시점에서는 코드의 오류를 잡아주고, 
   //   런타임 시점에서는 실행 중 발생할 수 있는 문제를 처리함.
-  
+
+  @OneToMany(() => HealthProfile, healthProfile => healthProfile.user)
+  healthProfiles: HealthProfile[];
+
   @OneToMany(() => NutritionPlan, nutritionPlan => nutritionPlan.user)
   nutritionPlans: NutritionPlan[];
 

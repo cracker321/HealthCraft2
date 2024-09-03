@@ -11,7 +11,6 @@
 // NutritionPlan과 M:N 관계
 
 
-
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable } from 'typeorm';
 import { IsNotEmpty, IsNumber, Min, IsArray, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -127,5 +126,41 @@ export class Recipe {
     this.protein /= this.servings;
     this.carbs /= this.servings;
     this.fat /= this.servings;
+  }
+
+  // 레시피 요약 생성 메서드
+  generateSummary(): string {
+    let summary = `레시피: ${this.name}\n\n`;
+    summary += `설명: ${this.description}\n\n`;
+    summary += `준비 시간: ${this.prepTime}분\n`;
+    summary += `조리 시간: ${this.cookTime}분\n`;
+    summary += `서빙 수: ${this.servings}\n\n`;
+    summary += "재료:\n";
+    this.ingredientAmounts.forEach(ia => {
+      const ingredient = this.ingredients.find(i => i.id === ia.ingredientId);
+      if (ingredient) {
+        summary += `- ${ingredient.name}: ${ia.amount} ${ia.unit}\n`;
+      }
+    });
+    summary += "\n조리 방법:\n";
+    this.instructions.forEach((step, index) => {
+      summary += `${index + 1}. ${step}\n`;
+    });
+    summary += "\n영양 정보 (1인분 기준):\n";
+    summary += `칼로리: ${this.calories.toFixed(2)} kcal\n`;
+    summary += `단백질: ${this.protein.toFixed(2)} g\n`;
+    summary += `탄수화물: ${this.carbs.toFixed(2)} g\n`;
+    summary += `지방: ${this.fat.toFixed(2)} g\n`;
+    summary += `\n태그: ${this.tags.join(', ')}`;
+    return summary;
+  }
+
+  // 특정 식이 제한에 맞는지 확인하는 메서드
+  checkDietaryRestrictions(restrictions: string[]): boolean {
+    return this.ingredients.every(ingredient => 
+      !restrictions.some(restriction => 
+        ingredient.dietaryRestrictions?.includes(restriction)
+      )
+    );
   }
 }

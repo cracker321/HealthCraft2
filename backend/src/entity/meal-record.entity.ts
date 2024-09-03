@@ -15,20 +15,19 @@
 // FoodDatabase와 M:N 관계 (하나의 식사 기록은 여러 음식을 포함할 수 있고, 하나의 음식은 여러 식사 기록에 포함될 수 있음)
 
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
-import { IsNotEmpty, IsDate, IsEnum, IsNumber, Min } from 'class-validator';
+import { IsNotEmpty, IsDate, IsEnum, IsNumber, Min, IsOptional } from 'class-validator';
 import { User } from './user.entity';
 import { FoodDatabase } from './food-database.entity';
+import { Recipe } from './recipe.entity';
 
 @Entity()
 export class MealRecord {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  // 사용자와의 다대일 관계
   @ManyToOne(() => User, user => user.mealRecords)
   user: User;
 
-  // 식사 정보
   @Column()
   @IsNotEmpty({ message: '식사 시간은 필수입니다.' })
   @IsDate({ message: '유효한 날짜 형식이 아닙니다.' })
@@ -39,16 +38,20 @@ export class MealRecord {
   @IsEnum(['breakfast', 'lunch', 'dinner', 'snack'], { message: '유효한 식사 유형이 아닙니다.' })
   mealType: string;
 
-  // 음식 항목과의 다대다 관계
   @ManyToMany(() => FoodDatabase)
   @JoinTable()
   foodItems: FoodDatabase[];
 
-  // 각 음식 항목의 섭취량
+  @ManyToMany(() => Recipe)
+  @JoinTable()
+  recipes: Recipe[];
+
   @Column('simple-json')
   portions: { [foodId: string]: number };
 
-  // 영양 정보 합계
+  @Column('simple-json')
+  recipeServings: { [recipeId: string]: number };
+
   @Column('float')
   @IsNumber({}, { message: '총 칼로리는 숫자여야 합니다.' })
   @Min(0, { message: '총 칼로리는 0 이상이어야 합니다.' })
@@ -70,9 +73,11 @@ export class MealRecord {
   totalFat: number;
 
   @Column({ nullable: true })
+  @IsOptional()
   notes?: string;
 
   @Column({ nullable: true })
+  @IsOptional()
   photoUrl?: string;
 
   @CreateDateColumn()
@@ -85,13 +90,29 @@ export class MealRecord {
     this.totalCarbs = 0;
     this.totalFat = 0;
 
+    // 개별 음식 항목에 대한 계산
     this.foodItems.forEach(food => {
       const portion = this.portions[food.id] || 1;
-      this.totalCalories += food.calories * portion;
-      this.totalProtein += food.protein * portion;
-      this.totalCarbs += food.carbs * portion;
-      this.totalFat += food.fat * portion;
+      this.totalCalories += food.caloriesPer100g * portion / 100;
+      this.totalProtein += food.proteinPer100g * portion / 100;
+      this.totalCarbs += food.carbsPer100g * portion / 100;
+      this.totalFat += food.fatPer100g * portion / 100;
     });
+
+    // 레시피에 대한 계산
+    this.recipes.forEach(recipe => {
+      const servings = this.recipeServings[recipe.id] || 1;
+      this.totalCalories += recipe.calories * servings;
+      this.totalProtein += recipe.protein * servings;
+      this.totalCarbs += recipe.carbs * servings;
+      this.totalFat += recipe.fat * servings;
+    });
+
+    // 소수점 둘째 자리까지 반올림
+    this.totalCalories = Number(this.totalCalories.toFixed(2));
+    this.totalProtein = Number(this.totalProtein.toFixed(2));
+    this.totalCarbs = Number(this.totalCarbs.toFixed(2));
+    this.totalFat = Number(this.totalFat.toFixed(2));
   }
 
   // 식사 기록에 음식 추가 메서드
@@ -106,5 +127,51 @@ export class MealRecord {
     this.foodItems = this.foodItems.filter(item => item.id !== foodItemId);
     delete this.portions[foodItemId];
     this.calculateNutrition();
+  }
+
+  // 식사 기록에 레시피 추가 메서드
+  addRecipe(recipe: Recipe, servings: number) {
+    this.recipes.push(recipe);
+    this.recipeServings[recipe.id] = servings;
+    this.calculateNutrition();
+  }
+
+  // 식사 기록에서 레시피 제거 메서드
+  removeRecipe(recipeId: string) {
+    this.recipes = this.recipes.filter(recipe => recipe.id !== recipeId);
+    delete this.recipeServings[recipeId];
+    this.calculateNutrition();
+  }
+
+  // 식사 요약 생성 메서드
+  generateSummary(): string {
+    let summary = `식사 기록 (${this.eatenAt.toLocaleString()})\n`;
+    summary += `식사 유형: ${this.mealType}\n\n`;
+    
+    if (this.foodItems.length > 0) {
+      summary += "음식 항목:\n";
+      this.foodItems.forEach(food => {
+        summary += `- ${food.name}: ${this.portions[food.id]}g\n`;
+      });
+    }
+    
+    if (this.recipes.length > 0) {
+      summary += "\n레시피:\n";
+      this.recipes.forEach(recipe => {
+        summary += `- ${recipe.name}: ${this.recipeServings[recipe.id]} 인분\n`;
+      });
+    }
+    
+    summary += `\n총 영양 정보:\n`;
+    summary += `칼로리: ${this.totalCalories} kcal\n`;
+    summary += `단백질: ${this.totalProtein}g\n`;
+    summary += `탄수화물: ${this.totalCarbs}g\n`;
+    summary += `지방: ${this.totalFat}g\n`;
+    
+    if (this.notes) {
+      summary += `\n비고: ${this.notes}\n`;
+    }
+    
+    return summary;
   }
 }

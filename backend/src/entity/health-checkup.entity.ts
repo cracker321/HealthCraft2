@@ -8,6 +8,13 @@
 
 // User와 N:1 관계 (여러 검진 기록이 한 사용자에 속함)
 
+// HealthCheckup 엔티티:
+// 정기 건강 검진 결과 저장
+// 각종 건강 지표(혈압, 콜레스테롤, 혈당 등) 포함
+// 건강 상태 모니터링 및 영양 계획 조정에 활용
+// 연관 관계:
+// User와 N:1 관계 (여러 검진 기록이 한 사용자에 속함)
+
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, ManyToOne } from 'typeorm';
 import { IsNotEmpty, IsNumber, Min, Max, IsDate, IsOptional } from 'class-validator';
 import { User } from './user.entity';
@@ -87,8 +94,12 @@ export class HealthCheckup {
   createdAt: Date;
 
   // 건강 상태 평가 메서드
-  evaluateHealthStatus(): { [key: string]: string } {
-    const status = {};
+  evaluateHealthStatus(): { bloodPressure: string; cholesterol: string; bloodSugar: string } {
+    const status = {
+      bloodPressure: 'Normal',
+      cholesterol: 'Desirable',
+      bloodSugar: 'Normal'
+    };
 
     // 혈압 평가
     if (this.systolicBP < 120 && this.diastolicBP < 80) {

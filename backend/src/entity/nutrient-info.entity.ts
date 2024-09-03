@@ -9,7 +9,6 @@
 
 // 다른 엔티티들(FoodDatabase, Recipe, MealRecord 등)에서 참조됨
 
-
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { IsNotEmpty, IsNumber, Min, IsOptional } from 'class-validator';
 
@@ -74,5 +73,31 @@ export class NutrientInfo {
   // 특정 나이 그룹에 대한 권장 섭취량 반환 메서드
   getRecommendationForAge(ageGroup: string): number | undefined {
     return this.ageSpecificRecommendations?.[ageGroup];
+  }
+
+  // 영양소 정보 요약 생성 메서드
+  generateSummary(): string {
+    let summary = `영양소: ${this.name}\n`;
+    summary += `단위: ${this.unit}\n`;
+    summary += `일일 권장 섭취량: ${this.dailyRecommendedIntake}\n`;
+    if (this.description) {
+      summary += `설명: ${this.description}\n`;
+    }
+    if (this.benefits) {
+      summary += `이점: ${this.benefits}\n`;
+    }
+    if (this.deficiencySymptoms) {
+      summary += `결핍 증상: ${this.deficiencySymptoms}\n`;
+    }
+    if (this.excessSymptoms) {
+      summary += `과다 섭취 증상: ${this.excessSymptoms}\n`;
+    }
+    if (this.foodSources && this.foodSources.length > 0) {
+      summary += `식품 원천: ${this.foodSources.join(', ')}\n`;
+    }
+    if (this.upperLimit) {
+      summary += `상한 섭취량: ${this.upperLimit}\n`;
+    }
+    return summary;
   }
 }
