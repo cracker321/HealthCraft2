@@ -215,27 +215,31 @@ export class User { // '클래스 User' 를 정의함.
 
   // [ 연관관계 정의 ]
 
+  
+  //   @OneToMany(() => HealthProfile, healthProfile => healthProfile.user)
+  //   healthProfiles: HealthProfile[];
+
 
   // - @OneToMany
-  //   : TypeORM 의 데코레이터로 'User 엔티티' 와 'HealthProfile 엔티티' 간의 '1 : N 관계'를 정의.
-  //     이는 하나의 사용자 User 엔티티' 가 'N 개의 건강 프로필 HealthProfile' 을 가질 수 있음.
-  //     '부모(One, 사용자 User)' 는 'N 명의 자녀(Many, 건강 프로필 HealthProfile)'를 가질 수 있음.
-  //     이때 각각의 자녀(N 개의 건강 프로필 HeatlhProfile)들은 자신만의 특성을 가지고 있지만,
-  //     이는 모두 부모(1 명의 사용자 User)'와 연결되어 있음.
-  //     이 구조를 통해, 1 명의 사용자 User 아이디로 그 사용자의 N 개의 모든 건강 프로파일을 쉽게 검색할 수 있음.
-  //     비유하자면, 한 사람이 운동 관련 건강 프로필, 식이요법 관련 건강 프로필 등 N 개의 건강 프로필들을 관리할 수 있음.
-  //     이처럼 한 사람은 N 개의 건강 프로필들을 가지고 있을 수 있음.
-  //     다른 비유하자면, 한 선생님(= 한 명의 User)은 여러 명의 학생(= 여러 개의 건강 프로필 HealthProfile)들을 가르칠 수 있음.
-  //     이때, 각 학생(= 개별 건강 프로필 HealthProfile)은 오직 한 명의 선생님(= 한 명의 User)에게만 속함.
+  //   : - TypeORM 의 데코레이터로 'User 엔티티' 와 'HealthProfile 엔티티' 간의 '1 : N 관계'를 정의.
+  //       이는 하나의 사용자 User 엔티티' 가 'N 개의 건강 프로필 HealthProfile' 을 가질 수 있음.
+  //       '부모(One, 사용자 User)' 는 'N 명의 자녀(Many, 건강 프로필 HealthProfile)'를 가질 수 있음.
+  //       이때 각각의 자녀(N 개의 건강 프로필 HeatlhProfile)들은 자신만의 특성을 가지고 있지만,
+  //       이는 모두 부모(1 명의 사용자 User)'와 연결되어 있음.
+  //       이 구조를 통해, 1 명의 사용자 User 아이디로 그 사용자의 N 개의 모든 건강 프로파일을 쉽게 검색할 수 있음.
+  //     - 비유하자면, 한 사람이 운동 관련 건강 프로필, 식이요법 관련 건강 프로필 등 N 개의 건강 프로필들을 관리할 수 있음.
+  //       이처럼 한 사람은 N 개의 건강 프로필들을 가지고 있을 수 있음.
+  //       다른 비유하자면, 한 선생님(= 한 명의 User)은 여러 명의 학생(= 여러 개의 건강 프로필 HealthProfile)들을 가르칠 수 있음.
+  //       이때, 각 학생(= 개별 건강 프로필 HealthProfile)은 오직 한 명의 선생님(= 한 명의 User)에게만 속함.
 
   // - () => HealthProfile
-  //   : 'HealthProfile 엔티티'를 지칭함. TypeORM 은 이 표현식을 통해 어떤 엔티티와 관계를 맺을지를 파악함.
-  //     TypeORM 은 '람다함수를 사용'하여 이 연관관계가 어떤 엔티티와 맺어지는지를 명확하게 이해함.
-  //     이 표현식은 나중에 런타임에서 '실제 엔티티 클래스 HealthProfile'을 참조하는 역할을 함.
-  //     비유하자면, 이 부분은 'N 명의 자녀(= N 개의 건강 프로필 HealthProfile)들의 종료'를 명시하는 것임.
-  //     부모(= 1 명의 사용자 User)가 N 명의 자녀(= N 개의 건강 프로필 HealthProfile)를 가질 수 있다고 할 때,
-  //     여기서는 N 명의 자녀(= N 개의 건강 프로필 HealthProfile)가 '건강 프로필 HealthProfile 엔티티'라는 것을 
-  //     구체적으로 명시하는 것임.
+  //   : - 'HealthProfile 엔티티'를 지칭함. TypeORM 은 이 표현식을 통해 어떤 엔티티와 관계를 맺을지를 파악함.
+  //       TypeORM 은 '람다함수를 사용'하여 이 연관관계가 어떤 엔티티와 맺어지는지를 명확하게 이해함.
+  //       이 표현식은 나중에 런타임에서 '실제 엔티티 클래스 HealthProfile'을 참조하는 역할을 함.
+  //     - 비유하자면, 이 부분은 'N 명의 자녀(= N 개의 건강 프로필 HealthProfile)들의 종료'를 명시하는 것임.
+  //       부모(= 1 명의 사용자 User)가 N 명의 자녀(= N 개의 건강 프로필 HealthProfile)를 가질 수 있다고 할 때,
+  //       여기서는 N 명의 자녀(= N 개의 건강 프로필 HealthProfile)가 '건강 프로필 HealthProfile 엔티티'라는 것을 
+  //       구체적으로 명시하는 것임.
   //     
   //     ***중요*** 
   //     람다함수는 익명함수로, '( 매개변수 ) => { 실행코드 }' 형태로 정의됨.
@@ -247,6 +251,35 @@ export class User { // '클래스 User' 를 정의함.
   //          return HealthProfile;  
   //     }
   //     
+
+  // - healthProfile => healthProfile.user
+  //   : - 이 부분은 'HeatlhProfile 엔티티'가 어떻게 'User 엔티티'와 연결되어있는지를 설명해줌.
+  //       구체적으로, 'HelathProfile 안에 있는 속성 user'가 이 'User 엔티티'와 연결되어 있음.
+  //       ***중요***
+  //       즉, 'HealthProfile 엔티티'가 '자신에게 속한 속성 user'를 참조함으로써, 결과적으로 'User 엔티티'를 참조하도록 하는 것이다!!
+  //     - '매개변수로 전달된 변수 healthProfile(HealthProfile 클래스의 객체)'를 매개변수로 받고,
+  //       그 변수 healthProfile 객체가 가지고 있는 '속성 user' 를 반환함.
+  //     - 이 부분은 '역참조 Reverse Reference)'를 정의함.
+  //       '각각의 HeatlhProfile 객체들'이 어떤 'User 객체'와 연관관계로 연결되어 있음을 말해주는 것임.
+  //       이 '매개변수 healthProfile'은 실제로 해당 User 객체가 연관관계를 맺고 있는 HelathProfile 객체임.
+  //     - 비유하자면, 하나의 회사 안에 있는 N 명의 직원들 간의 관계에서,
+  //       '각 직원(HealthProfile 엔티티)'에게는 '자신이 소속된 회사(User 엔티티)'를 가리키는 '속성 user'가 있는 것이다!
+
+  // - healthProfiles: HealthProfile[]
+  //   : - 'healthProfiles'
+  //       : '이 User 엔티티의 속성 이름'임.
+  //         이름을 이렇게 해줌으로써 이 User 엔티티가 N 개의 HealthProfile 객체'들'을 담고 있음을 암시해줌.
+  //         비유하자면, 선생님이 자신이 가르치는 모든 학생들의 목록을 가지고 있는 것임.
+  //         그리고 '이 목록의 이름'이 바로 'healthProfiles'임.
+  //         선생님은 이 속성 healthProfiles 를 통해 자신이 가르치는 모든 학생들을 관리함.
+  //     - 'HealthProfile[]'(타입 어노테이션)
+  //       : - HealthProfile[] 는 '속성 healthProfiles 의 타입'을 지정하는 것임.
+  //           이 속성은 'HealthProfile 타입'의 객체 N 개들로 구성된 '배열'임.
+  //           '대괄호 []'는 배열을 나타내며, 여기서 이 배열은 '동일한 타입의 여러 원소들을 담을(보관할) 수 있음'.
+  //           여기서는 HealthProfile 객체'들'만 담을 수 있는 배열임.
+  //         - 이 '타입 어노테이션'은 TypeScript 에서 정적 타입 검사를 가능하게 해줌.
+  //           이를 통해 '속성 healthProfiles' 에는 '오직 HealthProfile 타입의 객체들만 들어갈 수 있음을 보장'하는 것임.
+  //           ***즉, 'User 엔티티의 속성 healthProfile'에는 '여러 HealthProfile 객체들'의 정보가 '배열'로 저장되어 있는 것임!!***
 
   
   //   GPT 제목: '서비스 기획 및 설계' <-- 이게 메인.
