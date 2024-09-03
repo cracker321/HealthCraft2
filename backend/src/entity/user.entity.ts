@@ -215,12 +215,12 @@ export class User { // '클래스 User' 를 정의함.
 
   // [ 연관관계 정의 ]
 
-  
+
   //   @OneToMany(() => HealthProfile, healthProfile => healthProfile.user)
   //   healthProfiles: HealthProfile[];
 
 
-  // - @OneToMany
+  // - @OneToMany()
   //   : - TypeORM 의 데코레이터로 'User 엔티티' 와 'HealthProfile 엔티티' 간의 '1 : N 관계'를 정의.
   //       이는 하나의 사용자 User 엔티티' 가 'N 개의 건강 프로필 HealthProfile' 을 가질 수 있음.
   //       '부모(One, 사용자 User)' 는 'N 명의 자녀(Many, 건강 프로필 HealthProfile)'를 가질 수 있음.
@@ -231,9 +231,23 @@ export class User { // '클래스 User' 를 정의함.
   //       이처럼 한 사람은 N 개의 건강 프로필들을 가지고 있을 수 있음.
   //       다른 비유하자면, 한 선생님(= 한 명의 User)은 여러 명의 학생(= 여러 개의 건강 프로필 HealthProfile)들을 가르칠 수 있음.
   //       이때, 각 학생(= 개별 건강 프로필 HealthProfile)은 오직 한 명의 선생님(= 한 명의 User)에게만 속함.
+  //     ***중요***
+  //     - TypeScript 에서 '데코레이터'는 '함수처럼 동작'한다!!
+  //       이를 통해 그 데코레이터가 붙어 있는 클래스, 메소드, 속성 등에 추가적인 기능을 부여하거나 수정할 수 있음.
+  //       비유하자면, 데코레이터는 마치 어떤 물건에 라벨을 붙이는 것과 같음.
+  //       예를 들어, 물건에 "취급주의" 라벨을 붙이면 그 물건이 특별히 주의해서 다뤄져야 한다는 의미를 전음.
+  //       마찬가지로, 데코레이터는 클래스나 메서드에 라벨을 붙여 특정한 동작을 추가함.
+  //     ***중요***
+  //     - ()
+  //       : - 이 괄호 쌍은, 이 해당 데코레이터 함수가 필요한 정보를 전달받도록 함.
+  //           이는 함수 호출 시 인자값을 전달받는 것과 같은 원리임.
 
-  // - () => HealthProfile
-  //   : - 'HealthProfile 엔티티'를 지칭함. TypeORM 은 이 표현식을 통해 어떤 엔티티와 관계를 맺을지를 파악함.
+
+  // - 첫 번째 인수 () => HealthProfile 
+  //   : - 'User 엔티티'가 'HealthProfile 엔티티'와 '1:N 연관관계'가 있다는 것을 명시해주는 것임.
+  //       '() => HealthProfile' 은 'HealthProfile 엔티티'를 반환하는 화살표 함수이고, 
+  //       이 화살표 함수는 'User 엔티티'가 'HeatlhProfile 엔티티'와 '1:N 연관관계'를 맺고 있다는 것을 말해주는 것임.
+  //     - 이 화살표 함수는 'HealthProfile 엔티티'를 반환함. TypeORM 은 이 표현식을 통해 어떤 엔티티와 관계를 맺을지를 파악함.
   //       TypeORM 은 '람다함수를 사용'하여 이 연관관계가 어떤 엔티티와 맺어지는지를 명확하게 이해함.
   //       이 표현식은 나중에 런타임에서 '실제 엔티티 클래스 HealthProfile'을 참조하는 역할을 함.
   //     - 비유하자면, 이 부분은 'N 명의 자녀(= N 개의 건강 프로필 HealthProfile)들의 종료'를 명시하는 것임.
@@ -252,11 +266,16 @@ export class User { // '클래스 User' 를 정의함.
   //     }
   //     
 
-  // - healthProfile => healthProfile.user
-  //   : - 이 부분은 'HeatlhProfile 엔티티'가 어떻게 'User 엔티티'와 연결되어있는지를 설명해줌.
+
+  // - 두 번째 인수 healthProfile => healthProfile.user
+  //   : - 'User 엔티티'가 'HealthProfile 클래스의 user 속성'과 연결되어 있음을 명시해주는 것임.
+  //       'healthProfile => healthProfile.user' 는 'healthProfile.user'를 반환해주는 화살표 함수이고,
+  //       이 화살표 함수는 'User 엔티티'가 'HealthProfile 클래스의 user 속성'과 연결되어 있음을 명시해주는 것임.
+  //     - 이 부분은 'HeatlhProfile 엔티티'가 어떻게 'User 엔티티'와 연결되어있는지를 설명해줌.
   //       구체적으로, 'HelathProfile 안에 있는 속성 user'가 이 'User 엔티티'와 연결되어 있음.
   //       ***중요***
-  //       즉, 'HealthProfile 엔티티'가 '자신에게 속한 속성 user'를 참조함으로써, 결과적으로 'User 엔티티'를 참조하도록 하는 것이다!!
+  //       즉, 'HealthProfile 엔티티'가 '자신 엔티티 클래스 내부에 있는 속성 user'를 참조함으로써, 
+  //       결과적으로 'User 엔티티'를 참조하도록 하는 것이다!!
   //     - '매개변수로 전달된 변수 healthProfile(HealthProfile 클래스의 객체)'를 매개변수로 받고,
   //       그 변수 healthProfile 객체가 가지고 있는 '속성 user' 를 반환함.
   //     - 이 부분은 '역참조 Reverse Reference)'를 정의함.
@@ -264,6 +283,7 @@ export class User { // '클래스 User' 를 정의함.
   //       이 '매개변수 healthProfile'은 실제로 해당 User 객체가 연관관계를 맺고 있는 HelathProfile 객체임.
   //     - 비유하자면, 하나의 회사 안에 있는 N 명의 직원들 간의 관계에서,
   //       '각 직원(HealthProfile 엔티티)'에게는 '자신이 소속된 회사(User 엔티티)'를 가리키는 '속성 user'가 있는 것이다!
+
 
   // - healthProfiles: HealthProfile[]
   //   : - 'healthProfiles'
@@ -281,9 +301,6 @@ export class User { // '클래스 User' 를 정의함.
   //           이를 통해 '속성 healthProfiles' 에는 '오직 HealthProfile 타입의 객체들만 들어갈 수 있음을 보장'하는 것임.
   //           ***즉, 'User 엔티티의 속성 healthProfile'에는 '여러 HealthProfile 객체들'의 정보가 '배열'로 저장되어 있는 것임!!***
 
-  
-  //   GPT 제목: '서비스 기획 및 설계' <-- 이게 메인.
-  //             또는 'Top VSCode GPT Plugins'
   
   
   //    ***중요***
