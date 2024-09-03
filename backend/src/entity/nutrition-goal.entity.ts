@@ -1,15 +1,17 @@
-
-
-
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
-import { IsNotEmpty, IsNumber, Min, Max, IsDate, IsEnum } from 'class-validator';
+import { IsNotEmpty, IsNumber, Min, Max, IsDate, IsEnum, IsOptional } from 'class-validator';
 import { User } from './user.entity';
 
+// NutritionGoal 엔티티:
+// 사용자의 영양 목표를 저장하고 관리하는 엔티티
+// 목표 유형, 칼로리 및 영양소 목표, 시작일 및 종료일 등을 포함
 @Entity()
 export class NutritionGoal {
+  // 'uuid'를 문자열로 변경
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  // 사용자와의 다대일 관계
   @ManyToOne(() => User, user => user.nutritionGoals)
   user: User;
 
@@ -19,6 +21,7 @@ export class NutritionGoal {
   startDate: Date;
 
   @Column({ nullable: true })
+  @IsOptional()
   @IsDate({ message: '유효한 날짜 형식이 아닙니다.' })
   endDate?: Date;
 
@@ -50,9 +53,11 @@ export class NutritionGoal {
   fatTarget: number;
 
   @Column('simple-json', { nullable: true })
+  @IsOptional()
   additionalNutrients?: { [nutrient: string]: number };
 
   @Column('text', { nullable: true })
+  @IsOptional()
   notes?: string;
 
   @CreateDateColumn()
@@ -62,6 +67,7 @@ export class NutritionGoal {
   updatedAt: Date;
 
   // 목표 달성 진행률 계산 메서드
+  // 현재 섭취량을 입력받아 각 영양소별 목표 달성 진행률을 계산
   calculateProgress(currentIntake: { calories: number, protein: number, carbs: number, fat: number }): { [key: string]: number } {
     return {
       caloriesProgress: (currentIntake.calories / this.dailyCalorieTarget) * 100,
@@ -72,6 +78,7 @@ export class NutritionGoal {
   }
 
   // 영양 목표 요약 생성 메서드
+  // 현재 설정된 영양 목표의 상세 내용을 문자열로 반환
   generateSummary(): string {
     let summary = `영양 목표 (${this.startDate.toLocaleDateString()} - ${this.endDate ? this.endDate.toLocaleDateString() : '진행 중'})\n\n`;
     summary += `목표 유형: ${this.goalType}\n`;

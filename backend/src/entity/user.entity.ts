@@ -82,6 +82,7 @@ import { MealRecord } from './meal-record.entity';
 import { ExerciseRecord } from './exercise-record.entity';
 import { HealthCheckup } from './health-checkup.entity';
 import { HealthReport } from './health-report.entity';
+import { NutritionGoal } from './nutrition-goal.entity';
 import { Allergy } from './allergy.entity';
 import { DietaryRestriction } from './dietary-restriction.entity';
 import { CalorieCalculation } from './calorie-calculation.entity';
@@ -414,6 +415,9 @@ export class User { // '클래스 User' 를 정의함.
 
   @OneToMany(() => NutritionPlan, nutritionPlan => nutritionPlan.user)
   nutritionPlans: NutritionPlan[];
+
+  @OneToMany(() => NutritionGoal, nutritionGoal => nutritionGoal.user)
+  nutritionGoals: NutritionGoal[];
 
   @OneToMany(() => MealRecord, mealRecord => mealRecord.user)
   mealRecords: MealRecord[];
