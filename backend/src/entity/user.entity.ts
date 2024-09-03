@@ -14,7 +14,7 @@
 // ExerciseRecord와 1:N 관계 (한 사용자는 여러 운동 기록을 가질 수 있음)
 // Allergy, DietaryRestriction과 각각 1:N 관계
 
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { OneToMany, Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 // - TypeORM 라이브러리에서 필요한 기능들을 가져옴.
 // - TypeORM
 //   : TypeScript 와 JavaScript 를 위한 ORM(Object-Relational Mapping) 라이브러리로,
@@ -399,7 +399,6 @@ export class User { // '클래스 User' 를 정의함.
   @OneToMany(() => HealthProfile, healthProfile => healthProfile.user)
   healthProfiles: HealthProfile[];
 
-
   @OneToMany(() => NutritionPlan, nutritionPlan => nutritionPlan.user)
   nutritionPlans: NutritionPlan[];
 
@@ -408,15 +407,6 @@ export class User { // '클래스 User' 를 정의함.
 
   @OneToMany(() => ExerciseRecord, exerciseRecord => exerciseRecord.user)
   exerciseRecords: ExerciseRecord[];
-
-  @OneToMany(() => WaterIntakeRecord, waterIntakeRecord => waterIntakeRecord.user)
-  waterIntakeRecords: WaterIntakeRecord[];
-
-  @OneToMany(() => SleepRecord, sleepRecord => sleepRecord.user)
-  sleepRecords: SleepRecord[];
-
-  @OneToMany(() => MoodRecord, moodRecord => moodRecord.user)
-  moodRecords: MoodRecord[];
 
   @OneToMany(() => SupplementRecord, supplementRecord => supplementRecord.user)
   supplementRecords: SupplementRecord[];

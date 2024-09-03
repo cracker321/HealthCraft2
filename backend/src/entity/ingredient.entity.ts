@@ -46,6 +46,25 @@ export class Ingredient {
   @Min(0, { message: '지방은 0 이상이어야 합니다.' })
   fat: number; // 100g 당 지방 (g)
 
+
+  // < >
+
+  // - '@Column('float', { nullable: true })'
+  //   : - 이 'ingredient 엔티티의 fiber 속성'이 DB 테이블 ingredient 에서 하나의 컬럼 column 으로 매핑됨.
+  //     - 'float'
+  //       : 이 컬럼을 float 데이터 타입으로 지정하여,
+  //         이 컬럼이 '소수점이 포함된 숫자(= 실수)'를 저장할 수 있도록 함.
+  //     - '{ nullable: true }'
+  //       : - 이 '속성 fiber'에 해당하는 컬럼이 null 값을 가질 수 있음을 명시해줌. 
+  //           즉, 이 fiber 컬럼은 '비어 있을 수 있다'는 것이다!!
+  //         - 비유하자면, '학생들의 정보가 담긴 카드(= 테이블 Ingredient)'가 있고, 이 카드에는 각 학생들의 이름, 생년월일, 주소(= 컬럼 fiber) 등이 기재되는데,
+  //           어떤 학생들은 '주소(= 속성 fiber)'를 입력하지 않을 수도 있음.
+  //           이런 경우, 그 카드(= 테이블 Ingredient)의 주소(= 컬럼 fiber)란이 비어있게 됨.
+  //           nullable: true 는 이와 같은 상황을 허용하는 것임.
+  // - '@IsOptional'
+  //   : class
+  // - 'fiber?: number'
+  //  
   @Column('float', { nullable: true })
   @IsOptional()
   @IsNumber({}, { message: '식이섬유는 숫자여야 합니다.' })

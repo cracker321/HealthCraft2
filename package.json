@@ -27,6 +27,7 @@
   "homepage": "https://github.com/cracker321/HealthCraft2#readme",
   "dependencies": {
     "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
     "express": "^4.17.1",
     "reflect-metadata": "^0.1.14",
     "typeorm": "^0.3.20"

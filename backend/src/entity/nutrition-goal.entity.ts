@@ -1,13 +1,4 @@
-// CalorieCalculation 엔티티:
 
-
-// 사용자의 칼로리 계산 결과 저장
-// 계산 날짜, 입력 음식 목록, 총 칼로리 등 포함
-// 영양 목표 달성 추적에 활용
-// 연관 관계:
-
-// User와 N:1 관계 (여러 계산 결과가 한 사용자에 속함)
-// MealRecord, FoodDatabase와 관련됨
 
 
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm';
